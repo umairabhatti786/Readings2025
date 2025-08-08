@@ -1,40 +1,29 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const TOKEN = "@token";
-export const AUTH_DATA = "@authdata";
+export const GUESTTOKEN = "@guestToken";
+export const CURRENT_POSITION="@location" 
+export const AUTHDATA = "@authData";
+export const DISPATCH_ADDRESS = "@dispatchAddress";
+export const DISPATCH_PAYMENY_METHOD = "@dispatchPaymentMethod";
+
+export const BILLING_ADDRESS = "@billingAddress";
+export const Buy_NOW_EMAIL = "@buyNowEmail";
+
+export const PAYMENT_METHOD = "@paymentMethod";
 
 export const StorageServices = {
-  setItem: async (key: string, value: any): Promise<void> => {
-    try {
-      await AsyncStorage.setItem(key, JSON.stringify(value));
-    } catch (error) {
-      console.error(`Error setting item in AsyncStorage: ${error}`);
-    }
+  setItem: async (key: any, value: any) => {
+    await AsyncStorage.setItem(key, JSON.stringify(value));
   },
-
-  getItem: async <T = any>(key: string): Promise<T | null> => {
-    try {
-      const value = await AsyncStorage.getItem(key);
-      return value ? JSON.parse(value) : null;
-    } catch (error) {
-      console.error(`Error getting item from AsyncStorage: ${error}`);
-      return null;
-    }
+  getItem: async (key: any) => {
+    const value = await AsyncStorage.getItem(key);
+    return value ? JSON.parse(value) || null : null;
   },
-
-  removeAll: async (): Promise<void> => {
-    try {
-      await AsyncStorage.clear();
-    } catch (error) {
-      console.error(`Error clearing AsyncStorage: ${error}`);
-    }
+  removeItem: async (key: any) => {
+    await AsyncStorage.removeItem(key);
   },
-
-  removeItem: async (key: string): Promise<void> => {
-    try {
-      await AsyncStorage.removeItem(key);
-    } catch (error) {
-      console.error(`Error removing item from AsyncStorage: ${error}`);
-    }
-  }
+  // removeItems: async (key:any)=>{
+  //     storage.delete(key);
+  // }
 };

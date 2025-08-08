@@ -1,4 +1,4 @@
-package com.remitrax
+package pk.com.reading
 
 import android.app.Application
 import com.facebook.react.PackageList

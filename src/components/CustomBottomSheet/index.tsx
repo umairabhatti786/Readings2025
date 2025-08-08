@@ -10,9 +10,7 @@ import Animated, {
   interpolate,
   useAnimatedStyle,
 } from "react-native-reanimated";
-import { theme } from "../../utils/Themes";
-import sizeHelper from "../../utils/Helpers";
-import CustomButtom from "../Button";
+import { colors } from "../../utils/colors";
 
 const CustomBottomSheet = (props: any) => {
   const {
@@ -22,13 +20,24 @@ const CustomBottomSheet = (props: any) => {
     children,
     snap,
     handleSheetChanges,
+    backgroundColor,
+    snapPoints,
+    onBackDrop,
+    enableContentPanningGesture,
+    enableDismissOnClose,
+    enableHandlePanningGesture,
+    idDisableDrop
   } = props;
 
-  const snapPoints = useMemo(() => ["55%", "80%"], []);
+  // const snapPoints = useMemo(() => ["55%", "55%"], []);
 
   useFocusEffect(
     useCallback(() => {
       return () => {
+        if (onBackDrop) {
+          onBackDrop(); // Make sure onBackDrop is defined before calling it
+        }
+
         bottomSheetModalRef.current?.close();
       };
     }, [])
@@ -37,42 +46,32 @@ const CustomBottomSheet = (props: any) => {
   return (
     <BottomSheetModal
       ref={bottomSheetModalRef}
+      enableContentPanningGesture={enableHandlePanningGesture} // Disable gesture-based closing
+      enableHandlePanningGesture={enableHandlePanningGesture} // Disable handle gesture closing
+      // enableDismissOnClose={enableDismissOnClose} // Prevent backdrop tap closing
       backdropComponent={(props) => (
-        <Backdrop {...props} bottomSheetModalRef={bottomSheetModalRef} />
+        <Backdrop {...props} bottomSheetModalRef={bottomSheetModalRef} idDisableDrop={idDisableDrop} />
       )}
       snapPoints={snapPoints}
       index={0}
-      backgroundStyle={{ backgroundColor: theme.colors.background }}
       onDismiss={props?.onDismiss}
+      backgroundStyle={{
+        borderTopLeftRadius: 25,  // Top left radius
+        borderTopRightRadius: 25, // Top right radius
+        backgroundColor:backgroundColor ||colors.white
+
+      }}
     >
       <BottomSheetScrollView showsVerticalScrollIndicator={false}>
         <SafeAreaView>
           <View style={{ paddingBottom: 30 }}>{children}</View>
         </SafeAreaView>
       </BottomSheetScrollView>
-      <View
-        style={{
-          width: "100%",
-          padding: sizeHelper.calWp(40),
-          position: "absolute",
-          bottom: 0,
-          backgroundColor:theme.colors.white,
-          alignItems: "center",
-        }}
-      >
-        <CustomButtom
-
-          text="I Agree"
-          // style={{ marginTop: sizeHelper.calHp(20) }}
-          onPress={() => bottomSheetModalRef.current.dismiss()}
-          width={"100%"}
-        />
-      </View>
     </BottomSheetModal>
   );
 };
 
-const Backdrop = ({ animatedIndex, bottomSheetModalRef, style }: any) => {
+const Backdrop = ({ animatedIndex, bottomSheetModalRef, style,idDisableDrop }: any) => {
   const containerAnimatedStyle = useAnimatedStyle(() => ({
     opacity: interpolate(
       animatedIndex.value,
@@ -86,7 +85,7 @@ const Backdrop = ({ animatedIndex, bottomSheetModalRef, style }: any) => {
     () => [
       style,
       {
-        backgroundColor: "rgba(0,0,0,0.6)",
+        backgroundColor: "rgba(0,0,0,0.2)",
       },
       containerAnimatedStyle,
     ],
@@ -95,7 +94,7 @@ const Backdrop = ({ animatedIndex, bottomSheetModalRef, style }: any) => {
 
   return (
     <Animated.View
-      onTouchStart={() => bottomSheetModalRef.current?.close()}
+      onTouchStart={() =>  !idDisableDrop&& bottomSheetModalRef.current?.close()}
       style={containerStyle}
     />
   );

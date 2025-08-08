@@ -1,640 +1,457 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   View,
   StyleSheet,
+  FlatList,
   TouchableOpacity,
   Image,
-  FlatList,
   ScrollView,
+  Animated,
+  PanResponder,
+  RefreshControl,
+  Platform,
+  StatusBar
 } from "react-native";
-import sizeHelper from "../../../utils/Helpers";
-import { theme } from "../../../utils/Themes";
-import ScreenLayout from "../../../components/ScreenLayout";
-import CustomText from "../../../components/Text";
-import { fonts } from "../../../utils/Themes/fonts";
-import { appStyles } from "../../../utils/GlobalStyles";
-import icons from "../../../utils/Constants/icons";
-import images from "../../../utils/Constants/images";
-import { WINDOW_WIDTH } from "@gorhom/bottom-sheet";
-import {
-  ExchangeRateData,
-  LatestTransactionsData,
-  QuickSendData,
-} from "../../../utils/Data";
+import { scale, verticalScale } from "react-native-size-matters";
+import CustomHeader from "../../../components/CustomHeader";
+import { colors } from "../../../utils/colors";
+import DiscountBooks from "./DiscountBooks";
+import CustomSearch from "../../../components/CustomSearch";
+import { appStyles } from "../../../utils/AppStyles";
+import { images } from "../../../assets/images";
+import CustomText from "../../../components/CustomText";
+import { font } from "../../../utils/font";
+import BooksCard from "../../../components/BooksCard";
+import { windowWidth } from "../../../utils/Dimensions";
+import { ApiServices } from "../../../apis/ApiServices";
+import { HomeLayout } from "../../../utils/Loyout/HomeLayout";
+import { URLS } from "../../../apis/Urls";
+import { useDispatch, useSelector } from "react-redux";
+import { getGuestToken, getToken, setAuthSearch, setSelectedViewAll } from "../../../redux/reducers/authReducer";
+import { setIsBooksAdvanceSearch } from "../../../redux/reducers/advanceSearchReducer";
+import { useIsFocused } from "@react-navigation/native";
+import { PanGestureHandler } from "react-native-gesture-handler";
+import PredictionList from "../../../components/PredictionList";
+import CustomToast from "../../../components/CustomToast";
+import { STATUS_BAR_HEIGHT } from "../../../utils/CommonHooks";
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const HomeScreen = ({ navigation }: any) => {
-  const Header = () => {
-    return (
-      <View
-        style={{
-          ...appStyles.rowjustify,
-          paddingHorizontal: sizeHelper.calWp(30),
-        }}
-      >
-        <TouchableOpacity
-          onPress={() => navigation.navigate("ProfileScreen")}
-          style={{ ...appStyles.row, gap: sizeHelper.calWp(25) }}
-        >
-          <Image
-            style={{
-              width: sizeHelper.calWp(105),
-              height: sizeHelper.calWp(105),
-              borderRadius: sizeHelper.calWp(105),
-            }}
-            source={images.user5}
-          />
-          <View>
-            <CustomText
-              text={"Hey, Donald"}
-              fontWeight="700"
-              size={30}
-              fontFam={fonts.PlusJakartaSans_Bold}
-            />
-            <CustomText
-              text={"Welcome back!"}
-              size={22}
-              color={theme.colors.text_gray100}
-            />
-          </View>
-        </TouchableOpacity>
+  const [activeTab, setActiveTab] = useState(0);
+  const [laoding, setlaoding] = useState(true);
+  const [message, setMessage] = useState("");
+  const [isMessage, setIsMessage] = useState(false);
+  const [search, setSearch] = useState("");
+  const fucused = useIsFocused();
+  const token = useSelector(getToken);
+  const guestToken=useSelector(getGuestToken)
+  const [booksData, setBooksData] = useState([]);
+  const dispatch = useDispatch();
+  const [refresh, setRefresh] = useState(false);
+  const position = useRef(new Animated.Value(0)).current;
+  const [predictionData, setPredictionData] = useState([]);
+  const [isPredictionList, setIsPredictionList] = useState(false);
 
-        <TouchableOpacity
-          // onPress={()=>navigation.navigate("TransactionHistory")}
-          style={{
-            width: sizeHelper.calWp(80),
-            height: sizeHelper.calWp(80),
-            borderRadius: sizeHelper.calWp(80),
-            backgroundColor: theme.colors.input_field_stroke,
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <View>
-            <Image
-              style={{
-                width: sizeHelper.calWp(35),
-                height: sizeHelper.calWp(35),
-              }}
-              source={icons.norification}
-            />
-            <View
-              style={{
-                position: "absolute",
-                top: sizeHelper.calHp(-5),
-                width: sizeHelper.calWp(20),
-                height: sizeHelper.calWp(20),
-                borderRadius: sizeHelper.calWp(20),
-                backgroundColor: theme.colors.secondary,
-                borderWidth: sizeHelper.calWp(5),
-                right: sizeHelper.calWp(-5),
-                borderColor: theme.colors.light_white,
-              }}
-            ></View>
-          </View>
-        </TouchableOpacity>
-      </View>
-    );
-  };
+  const [recentOrderHistory, setRecentOrderHistory] = useState([]);
+  const scrollRef = useRef();
+  useEffect(() => {
+    if(fucused){
+      console.log("isFcoussed")
+      getHomePageData(); // Run this function on the first visit
 
-  const AvailablebBalance = () => {
-    return (
-      <View
-        style={{
-          backgroundColor: theme.colors.primary,
-          borderRadius: sizeHelper.calWp(40),
-          padding: sizeHelper.calWp(25),
-          gap: sizeHelper.calHp(20),
-          marginHorizontal: sizeHelper.calWp(30),
-        }}
-      >
-        <View style={appStyles.rowjustify}>
-          <View
-            style={{
-              ...appStyles.row,
-              backgroundColor: theme.colors.light_blue,
-              paddingHorizontal: sizeHelper.calWp(18),
-              paddingVertical: sizeHelper.calHp(10),
-              borderRadius: 999,
-            }}
-          >
-            <TouchableOpacity
-              style={{ ...appStyles.row, gap: sizeHelper.calWp(12) }}
-            >
-              <CustomText
-                text={"US Dollar"}
-                fontWeight="600"
-                size={23}
-                color={theme.colors.white}
-                fontFam={fonts.PlusJakartaSans_SemiBold}
-              />
-              <Image
-                style={{
-                  width: sizeHelper.calWp(23),
-                  height: sizeHelper.calWp(23),
-                  tintColor: theme.colors.white,
-                  marginTop: sizeHelper.calHp(5),
-                }}
-                resizeMode="contain"
-                source={icons.down_arrow}
-              />
-            </TouchableOpacity>
-          </View>
-          <TouchableOpacity style={{ ...styles.circle }}>
-            <Image
-              style={{
-                width: sizeHelper.calWp(40),
-                height: sizeHelper.calWp(40),
-                tintColor: theme.colors.white,
-              }}
-              // resizeMode="contain"
-              source={icons.eye_off}
-            />
-          </TouchableOpacity>
-        </View>
+    }
+  }, [fucused]);
+  console.log("message", message);
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("tabPress", (e) => {
+      const isFocused = navigation.isFocused();
+      if (isFocused) {
+        console.log("ckdncdkncdkcndk");
+        // Scroll to the top if the tab is pressed again
+        scrollRef.current?.scrollTo({ y: 0, animated: true });
+      }
+    });
+    return unsubscribe;
+  }, [navigation]);
 
-        <View>
-          <CustomText text={"Available balance"} size={23} color={"#6AA5D8"} />
+ 
 
-          <CustomText
-            text={"$365,654.64"}
-            fontWeight="700"
-            size={55}
-            color={theme.colors.white}
-            fontFam={fonts.PlusJakartaSans_Bold}
-          />
-          <View
-            style={{
-              width: "100%",
-              height: sizeHelper.calHp(1.3),
-              backgroundColor: theme.colors.white + "40",
-              marginTop: sizeHelper.calHp(10),
-            }}
-          />
-        </View>
-        <View
-          style={{
-            ...appStyles.rowjustify,
-            paddingHorizontal: sizeHelper.calWp(40),
-          }}
-        >
-          <TouchableOpacity
-            onPress={() => navigation.navigate("SendMoneyScreen")}
-            style={{ alignItems: "center", gap: sizeHelper.calHp(5) }}
-          >
-            <TouchableOpacity
-              onPress={() => navigation.navigate("SendMoneyScreen")}
-              style={{
-                ...styles.circle,
-                borderWidth: 1,
-                borderColor: theme.colors.white,
-              }}
-            >
-              <Image style={styles.balanceActionIcon} source={icons.transfer} />
-            </TouchableOpacity>
-
-            <CustomText
-              text={"Transfer"}
-              color={theme.colors.white}
-              size={18}
-            />
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={{ alignItems: "center", gap: sizeHelper.calHp(5) }}
-          >
-            <TouchableOpacity
-              style={{
-                ...styles.circle,
-                borderWidth: 1,
-                borderColor: theme.colors.white,
-              }}
-            >
-              <Image style={styles.balanceActionIcon} source={icons.request} />
-            </TouchableOpacity>
-
-            <CustomText text={"Request"} color={theme.colors.white} size={18} />
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={{ alignItems: "center", gap: sizeHelper.calHp(5) }}
-          >
-            <TouchableOpacity
-              style={{
-                ...styles.circle,
-                borderWidth: 1,
-                borderColor: theme.colors.white,
-              }}
-            >
-              <Image
-                style={{
-                  width: sizeHelper.calWp(30),
-                  height: sizeHelper.calWp(30),
-                }}
-                source={icons.arrow_switch_horizontal}
-              />
-            </TouchableOpacity>
-
-            <CustomText
-              text={"Exchange"}
-              color={theme.colors.white}
-              size={18}
-            />
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={{ alignItems: "center", gap: sizeHelper.calHp(5) }}
-          >
-            <TouchableOpacity
-              style={{
-                ...styles.circle,
-                borderWidth: 1,
-                borderColor: theme.colors.white,
-              }}
-            >
-              <Image
-                style={{
-                  width: sizeHelper.calWp(25),
-                  height: sizeHelper.calWp(25),
-                  tintColor: theme.colors.white,
-                }}
-                source={icons.plus}
-              />
-            </TouchableOpacity>
-
-            <CustomText text={"Add"} color={theme.colors.white} size={18} />
-          </TouchableOpacity>
-        </View>
-      </View>
-    );
-  };
-  const ExchangeRateCard = ({ item }: any) => {
-    return (
-      <TouchableOpacity
-        activeOpacity={1}
-        style={{
-          backgroundColor: theme.colors.white,
-          width: WINDOW_WIDTH / 3,
-          borderRadius: sizeHelper.calWp(40),
-          gap: sizeHelper.calHp(10),
-          padding: sizeHelper.calWp(20),
-        }}
-      >
-        <Image
-          style={{
-            width: sizeHelper.calWp(75),
-            height: sizeHelper.calWp(75),
-            borderRadius: sizeHelper.calWp(75),
-          }}
-          source={item?.icon}
-        />
-        <View style={{ gap: sizeHelper.calHp(5) }}>
-          <CustomText
-            text={item?.name}
-            numberOfLines={1}
-            color={theme.colors.light_black}
-            fontFam={fonts.PlusJakartaSans_SemiBold}
-          />
-
-          <CustomText
-            text={item?.rate}
-            size={30}
-            color={theme.colors.black}
-            fontWeight="700"
-            fontFam={fonts.PlusJakartaSans_Bold}
-          />
-        </View>
-      </TouchableOpacity>
-    );
-  };
-
-  const QuickSendCard = ({ item }: any) => {
-    return (
-      <TouchableOpacity
-        style={{ alignItems: "center", gap: sizeHelper.calHp(5) }}
-      >
-        <Image
-          style={{
-            width: sizeHelper.calWp(95),
-            height: sizeHelper.calWp(95),
-            borderRadius: sizeHelper.calWp(95),
-          }}
-          source={item?.icon}
-        />
-
-        <CustomText text={"Transfer"} size={18} />
-      </TouchableOpacity>
-    );
-  };
-
-  const LatestTransactionsCard = ({ item }: any) => {
-    return (
-      <View
-        style={{
-          padding: sizeHelper.calWp(25),
-          flexDirection: "row",
-          justifyContent: "space-between",
-          alignItems: "center",
-          backgroundColor: theme.colors.white,
-          borderRadius: sizeHelper.calWp(30),
-        }}
-      >
-        <View style={{ ...appStyles.row, gap: sizeHelper.calWp(25) }}>
-          <Image
-            style={{
-              width: sizeHelper.calWp(80),
-              height: sizeHelper.calWp(80),
-              borderRadius: sizeHelper.calWp(80),
-            }}
-            source={item?.icon}
-          />
-          <View style={{ gap: sizeHelper.calHp(5) }}>
-            <CustomText
-              text={item?.name}
-              fontWeight="700"
-              size={25}
-              fontFam={fonts.PlusJakartaSans_Bold}
-            />
-            <CustomText
-              text={item?.date}
-              size={19}
-              color={theme.colors.text_gray100}
-            />
-          </View>
-        </View>
-        <View style={{ alignItems: "flex-end", gap: sizeHelper.calHp(10) }}>
-          <CustomText
-            text={item?.price}
-            fontWeight="700"
-            size={25}
-            color={
-              item?.status == "failed"
-                ? theme.colors.warning
-                : theme.colors.green
+  const getHomePageData = async () => {
+    ApiServices.GetHome(token, async ({ isSuccess, response }: any) => {
+      console.log("response",response)
+      if (isSuccess) {
+        let result = JSON.parse(response);
+        const data = result?.tags_books;
+        if (data) {
+          setBooksData(data);
+          ApiServices.GetRecentOrderHistory(
+            token?.length!=0?token: guestToken,
+            async ({ isSuccess, response }: any) => {
+              if (isSuccess) {
+                let result = JSON.parse(response);
+                const data = result?.data?.recentHistory;
+                setRecentOrderHistory(data);
+              }
             }
-            fontFam={fonts.PlusJakartaSans_SemiBold}
-          />
-
-          <TouchableOpacity
-            style={{
-              ...appStyles.row,
-              gap: sizeHelper.calWp(20),
-              backgroundColor:
-                item?.status == "completed"
-                  ? "#E8EFE8"
-                  : item?.status == "pending"
-                  ? "#E8E7F5"
-                  : item?.status == "failed"
-                  ? "#F4E7E7"
-                  : theme.colors.primary,
-              paddingHorizontal: sizeHelper.calWp(25),
-              paddingVertical: sizeHelper.calHp(8),
-              borderRadius: sizeHelper.calWp(18),
-            }}
-          >
-            <Image
-              style={{
-                width: sizeHelper.calWp(33),
-                height: sizeHelper.calWp(33),
-                tintColor:
-                  item?.status == "completed"
-                    ? theme.colors.dark_green
-                    : item?.status == "pending"
-                    ? theme.colors.dark_blue
-                    : item?.status == "failed"
-                    ? theme.colors.dark_red
-                    : theme.colors.primary,
-                marginTop: sizeHelper.calHp(5),
-              }}
-              resizeMode="contain"
-              source={
-                item?.status == "completed"
-                  ? icons.check
-                  : item?.status == "pending"
-                  ? icons?.clock
-                  : item?.status == "failed"
-                  ? icons.cross
-                  : icons?.check
-              }
-            />
-            <CustomText
-              text={
-                item?.status == "completed"
-                  ? "Completed"
-                  : item?.status == "pending"
-                  ? "Pending"
-                  : item?.status == "failed"
-                  ? "Failed"
-                  : "Status"
-              }
-              fontWeight="600"
-              size={21}
-              color={
-                item?.status == "completed"
-                  ? theme.colors.dark_green
-                  : item?.status == "pending"
-                  ? theme.colors.dark_blue
-                  : item?.status == "failed"
-                  ? theme.colors.dark_red
-                  : theme.colors.primary
-              }
-              fontFam={fonts.PlusJakartaSans_SemiBold}
-            />
-          </TouchableOpacity>
-        </View>
-      </View>
-    );
+          );
+          setlaoding(false);
+        } else {
+          setlaoding(false);
+          setMessage(result?.error);
+          setIsMessage(true);
+        }
+      } else {
+        setlaoding(false);
+        setMessage("Something went wrong");
+        setIsMessage(true);
+      }
+    });
   };
   return (
     <>
-      <ScreenLayout
-        style={{
-          flex: 1,
-          gap: sizeHelper.calWp(30),
-        }}
-      >
-        <View
-          style={{
-            flex: 1,
-            gap: sizeHelper.calHp(30),
-            backgroundColor: theme.colors.background,
-          }}
+        {/* <Animated.View
+          {...panResponder.panHandlers}
+          style={[
+            {
+              gap: verticalScale(10),
+              flex: 1,
+            },
+            { transform: [{ translateX: position }] },
+          ]}
+        > */}
+
+        <SafeAreaView
+          style={[
+            {
+              gap: verticalScale(10),
+              flex: 1,
+            },
+          ]}
         >
-          <Header />
-          <ScrollView
-            contentContainerStyle={{
-              gap: sizeHelper.calHp(30),
-              backgroundColor: theme.colors.background,
-              paddingBottom: sizeHelper.calHp(30),
-            }}
-          >
-            {/* <View style=> */}
-            <AvailablebBalance />
+          {laoding ? (
+            <HomeLayout />
+          ) : (
+            <>
+              <View style={{ flex: 1 }}>
+                <ScrollView
+                  ref={scrollRef}
+                  removeClippedSubviews={false}
+                  style={{ ...appStyles.main }}
+                  showsVerticalScrollIndicator={false}
+                  // refreshControl={
+                  //   <RefreshControl refreshing={refresh} onRefresh={getHomePageData} />
+                  // }
+                  contentContainerStyle={{
+                    paddingBottom: verticalScale(80),
+                    gap: verticalScale(15),
+                    paddingTop: verticalScale(Platform.OS=="ios"? 80:45),
+                    
+                  }}
+                >
+                  <View
+                    style={{
+                      paddingHorizontal: scale(20),
+                      gap: verticalScale(15),
+                    }}
+                  >
+                    <DiscountBooks />
+                    <View style={appStyles.rowjustify}>
+                      <CustomSearch
+                        onSearch={() => {
+                          if (search.length > 0) {
+                            dispatch(setIsBooksAdvanceSearch(false));
 
-            {/* </View> */}
-            <View style={{ gap: sizeHelper.calHp(20) }}>
-              <View
-                style={{
-                  ...appStyles.rowjustify,
-                  paddingHorizontal: sizeHelper.calWp(30),
-                }}
-              >
-                <CustomText
-                  text={"Exchange rate"}
-                  fontWeight="700"
-                  size={28}
-                  fontFam={fonts.PlusJakartaSans_Bold}
-                />
-
-                <CustomText
-                  text={"View all"}
-                  size={22}
-                  color={theme.colors.text_gray200}
-                />
-              </View>
-              <FlatList
-                data={ExchangeRateData}
-                horizontal
-                style={{ paddingLeft: sizeHelper.calWp(30) }}
-                contentContainerStyle={{
-                  gap: sizeHelper.calWp(20),
-                  paddingRight: sizeHelper.calWp(60),
-                  // justifyContent: "space-between",
-                }}
-                showsHorizontalScrollIndicator={false}
-                renderItem={({ item, index }: any) => {
-                  return (
-                    <>
-                      <ExchangeRateCard item={item} />
-                    </>
-                  );
-                }}
-              />
-            </View>
-            {/* Quick send */}
-            <View style={{ gap: sizeHelper.calHp(20) }}>
-              <View
-                style={{
-                  paddingHorizontal: sizeHelper.calWp(30),
-                }}
-              >
-                <CustomText
-                  text={"Quick send"}
-                  fontWeight="700"
-                  size={28}
-                  fontFam={fonts.PlusJakartaSans_Bold}
-                />
-              </View>
-              <FlatList
-                data={QuickSendData}
-                horizontal
-                ListHeaderComponent={() => {
-                  return (
-                    <View
-                      style={{
-                        gap: sizeHelper.calWp(20),
-                        flexDirection: "row",
-                        alignItems: "center",
-                      }}
-                    >
-                      <TouchableOpacity
-                        style={{
-                          alignItems: "center",
-                          gap: sizeHelper.calHp(15),
+                            setSearch("");
+                            navigation.navigate("SearchResultScreen");
+                          }
                         }}
-                      >
-                        <TouchableOpacity
-                          style={{
-                            ...styles.circle,
-                            borderWidth: 1,
-                            borderStyle: "dotted",
-                            borderColor: theme.colors.black,
-                            backgroundColor: theme.colors.white,
-                            height: sizeHelper.calWp(80),
-                            width: sizeHelper.calWp(80),
-                          }}
-                        >
-                          <Image
-                            style={{
-                              width: sizeHelper.calWp(30),
-                              height: sizeHelper.calWp(30),
-                              tintColor: theme.colors.black,
-                            }}
-                            source={icons.plus}
-                          />
-                        </TouchableOpacity>
-
-                        <CustomText text={"Add"} size={18} />
-                      </TouchableOpacity>
-
-                      <View
-                        style={{
-                          width: sizeHelper.calWp(2),
-                          height: sizeHelper.calHp(100),
-                          backgroundColor: theme.colors.black + "20",
+                        onSubmitEditing={() => {
+                          if (search.length > 0) {
+                            dispatch(setIsBooksAdvanceSearch(false));
+                            setSearch("");
+                            navigation.navigate("SearchResultScreen");
+                          }
                         }}
+                        onFilter={() => {
+                          navigation.navigate("FilterScreen");
+                        }}
+                        value={search}
+                        onChangeText={(value: any) => {
+                          if (value.length == 0) {
+                            setIsPredictionList(false);
+                          } else {
+                            setIsPredictionList(true);
+                          }
+                          setSearch(value);
+                          dispatch(setAuthSearch(value));
+                        }}
+                        placeholder="Search"
+                        width={"80%"}
+                        filter={true}
                       />
                     </View>
-                  );
-                }}
-                style={{ paddingLeft: sizeHelper.calWp(30) }}
-                contentContainerStyle={{
-                  gap: sizeHelper.calWp(30),
-                  paddingRight: sizeHelper.calWp(60),
-                }}
-                showsHorizontalScrollIndicator={false}
-                renderItem={({ item, index }: any) => {
-                  return (
-                    <>
-                      <QuickSendCard item={item} />
-                    </>
-                  );
-                }}
-              />
-            </View>
+                  </View>
 
-            <View
-              style={{
-                gap: sizeHelper.calHp(20),
-                paddingHorizontal: sizeHelper.calWp(30),
+                  <View>
+                    <FlatList
+                      data={[
+                        "All",
+                        "Fiction",
+                        "Non-fiction",
+                        "Young Adults",
+                        "Children",
+                        "Urdu Books",
+                        "Our Publications",
+                        "Stationery & Art Supplies",
+                      ]}
+                      horizontal
+                      showsHorizontalScrollIndicator={false}
+                      style={{
+                        paddingLeft: scale(20),
+                        marginTop: verticalScale(-5),
+                      }}
+                      contentContainerStyle={{
+                        gap: scale(10),
+                        paddingRight: scale(40),
+                      }}
+                      keyExtractor={(item, index) => index.toString()}
+                      renderItem={({ item, index }: any) => {
+                        return (
+                          <TouchableOpacity
+                            activeOpacity={0.6}
+                            onPress={() => setActiveTab(index)}
+                            style={{
+                              ...styles.categoryContainer,
+                              backgroundColor:
+                                activeTab == index
+                                  ? colors.black
+                                  : colors.white,
+                            }}
+                          >
+                            <CustomText
+                              color={
+                                activeTab == index ? colors.white : colors.grey
+                              }
+                              text={item}
+                              size={14}
+                            />
+                          </TouchableOpacity>
+                        );
+                      }}
+                    />
+                  </View>
+
+                  <View>
+                    {booksData?.map((ite: any, index: any) => {
+                      return (
+                        <View
+                          key={index.toString()}
+                          style={{ marginBottom: verticalScale(15) }}
+                        >
+                          <CustomText
+                            text={ite?.tag_description}
+                            color={colors.black}
+                            textTransform={"capitalize"}
+                            fontWeight="600"
+                            style={{
+                              marginLeft: scale(20),
+                              marginBottom: verticalScale(7),
+                              marginTop: verticalScale(5),
+                            }}
+                            fontFam={font.WorkSans_SemiBold}
+                            size={14}
+                          />
+                          <View style={{ ...appStyles.row }}>
+                            <FlatList
+                              data={ite?.books}
+                              horizontal
+                              showsHorizontalScrollIndicator={false}
+                              ListFooterComponent={({ item, index }: any) => {
+                                const lastItem = ite?.books?.[ite?.books.length - 1]; // Get last item
+                                                               return (
+                                  <TouchableOpacity
+                                    activeOpacity={0.5}
+                                    onPress={() =>
+                                      {
+                                        dispatch(setSelectedViewAll(ite?.url))
+                                      navigation.navigate("RecommendedScreen",{title:ite?.tag_description})
+                                      }
+                                      
+                                    }
+                                    style={styles.popularBox}
+                                  >
+                                    <View style={styles.popularContainer}>
+                                      <Image
+                                        source={images.add_unfill}
+                                        style={{
+                                          width: scale(22),
+                                          height: scale(22),
+                                          tintColor: colors.white,
+                                        }}
+                                        resizeMode="contain"
+                                      />
+                                    </View>
+
+                                    <CustomText
+                                      text={"View All"}
+                                      color={colors.white}
+                                      size={14}
+                                    />
+                                  </TouchableOpacity>
+                                );
+                              }}
+                              style={{ paddingLeft: scale(20) }}
+                              contentContainerStyle={{
+                                paddingRight: scale(40),
+                                gap: scale(15),
+                              }}
+                              keyExtractor={(item, index) => index.toString()}
+                              renderItem={({ item, index }: any) => {
+                                let book_data = {
+                                  title: item?.BOOK_TITLE,
+                                  auther: item?.authorName,
+                                  listPrice:
+                                    item?.currency == "Rs"
+                                      ? `${item?.currency} ${item?.PRICE}`
+                                      : `${item?.currency} ${item?.PRICE}`,
+                                  appPrice:
+                                    Number(item?.Discount) > 0
+                                      ? Math.floor(
+                                          Number(item?.PAK_PRICE) -
+                                            Number(item?.PAK_PRICE) *
+                                              (Number(item?.Discount) / 100)
+                                        )
+                                      : item?.PAK_PRICE,
+                                  book: `${URLS.IMAGE_URL}/images/${item?.picname}.webp`,
+                                  discount: Number(item?.Discount),
+                                  quantity: Number(item?.QUANTITY),
+                                  inStock: item?.availabilityStatus,
+                                  isInWishlist: item?.isInWishlist,
+                                  book_Id: item?.Book_Id,
+                                  isInCart:item?.isInCart
+                                };
+                                return (
+                                  <View>
+                                    <BooksCard
+                                      setIsMessage={setIsMessage}
+                                      setMessage={setMessage}
+                                      onPress={() =>
+                                        navigation.navigate(
+                                          "BookDetailScreen",
+                                          { Book_id: item?.Book_Id }
+                                        )
+                                      }
+                                      data={book_data}
+                                    />
+                                  </View>
+                                );
+                              }}
+                            />
+                          </View>
+                        </View>
+                      );
+                    })}
+                    {recentOrderHistory.length > 0 && (
+                      <View style={{ marginBottom: verticalScale(15) }}>
+                        <CustomText
+                          text={"Your Recent History"}
+                          color={colors.black}
+                          textTransform={"capitalize"}
+                          fontWeight="600"
+                          style={{
+                            marginLeft: scale(20),
+                            marginBottom: verticalScale(7),
+                            marginTop: verticalScale(5),
+                          }}
+                          fontFam={font.WorkSans_SemiBold}
+                          size={14}
+                        />
+                        <View style={{ ...appStyles.row }}>
+                          <FlatList
+                            data={recentOrderHistory}
+                            horizontal
+                            showsHorizontalScrollIndicator={false}
+                            style={{ paddingLeft: scale(20) }}
+                            contentContainerStyle={{
+                              paddingRight: scale(40),
+                              gap: scale(15),
+                            }}
+                            keyExtractor={(item, index) => index.toString()}
+                            renderItem={({ item, index }: any) => {
+                              let book_data = {
+                                title: item?.BOOK_TITLE,
+                                auther: item?.authorName,
+                                listPrice:
+                                  item?.currency == "Rs"
+                                    ? `${item?.currency} ${item?.PRICE}`
+                                    : `${item?.currency} ${item?.PRICE}`,
+                                appPrice:
+                                  Number(item?.Discount) > 0
+                                    ? Math.floor(
+                                        Number(item?.PAK_PRICE) -
+                                          Number(item?.PAK_PRICE) *
+                                            (Number(item?.Discount) / 100)
+                                      )
+                                    : item?.PAK_PRICE,
+                                book: `${URLS.IMAGE_URL}/images/${item?.picname}.webp`,
+                                discount: Number(item?.Discount),
+                                quantity: Number(item?.QUANTITY),
+                                inStock: item?.availabilityStatus,
+                                isInWishlist: item?.isInWishlist,
+                                book_Id: item?.Book_Id,
+                              };
+                              console.log('item?.Book_Id,',item?.Book_Id,)
+                              return (
+                                <View>
+                                  <BooksCard
+                                    setIsMessage={setIsMessage}
+                                    setMessage={setMessage}
+                                    onPress={() =>
+                                      navigation.navigate("BookDetailScreen", { Book_id: item?.Book_Id })
+                                    }
+                                    // onPress={() =>
+                                    //   navigation.navigate("BookDetailScreen", {
+                                    //     Book_id: item?.Book_Id,
+                                    //   })
+                                    // }
+                                    data={book_data}
+                                  />
+                                </View>
+                              );
+                            }}
+                          />
+                        </View>
+                      </View>
+                    )}
+                  </View>
+                </ScrollView>
+
+                {!laoding && (
+            <CustomHeader
+              containerStyle={{
+                backgroundColor: "rgba(243, 245, 247, 0.9)", // Semi-transparent background,
+                height: Platform.OS=="ios"? verticalScale(70):50,
+                width: "100%",
+                position: "absolute",
+                top: 0,
+                paddingHorizontal: scale(20),
+                paddingTop: verticalScale(Platform.OS=="ios"?  40:0),
               }}
-            >
-              <TouchableOpacity
-                onPress={() => navigation.navigate("TransactionHistory")}
-                style={{
-                  ...appStyles.rowjustify,
-                }}
-              >
-                <CustomText
-                  text={"Latest Transactions"}
-                  fontWeight="700"
-                  size={28}
-                  fontFam={fonts.PlusJakartaSans_Bold}
-                />
+            />
+          )}
+              </View>
+            </>
+          )}
 
-                <CustomText
-                  text={"View all"}
-                  size={22}
-                  color={theme.colors.text_gray200}
-                />
-              </TouchableOpacity>
-              <FlatList
-                data={LatestTransactionsData}
-                contentContainerStyle={{
-                  gap: sizeHelper.calWp(20),
-                }}
-                showsHorizontalScrollIndicator={false}
-                renderItem={({ item, index }: any) => {
-                  return (
-                    <>
-                      <LatestTransactionsCard item={item} />
-                    </>
-                  );
-                }}
-              />
-            </View>
-          </ScrollView>
-        </View>
-      </ScreenLayout>
+         
+        </SafeAreaView>
+      <CustomToast
+        marginBottom={70}
+        isVisable={isMessage}
+        setIsVisable={setIsMessage}
+        message={message}
+        color={colors.white}
+      />
     </>
   );
 };
@@ -642,17 +459,28 @@ const HomeScreen = ({ navigation }: any) => {
 export default HomeScreen;
 
 const styles = StyleSheet.create({
-  circle: {
-    height: sizeHelper.calWp(70),
-    width: sizeHelper.calWp(70),
-    backgroundColor: theme.colors.light_blue,
+  popularContainer: {
+    width: scale(62),
+    height: scale(62),
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: sizeHelper.calWp(70),
+    borderRadius: 999,
+    backgroundColor: "#FFFFFF20",
   },
-  balanceActionIcon: {
-    width: sizeHelper.calWp(20),
-    height: sizeHelper.calWp(20),
-    tintColor: theme.colors.white,
+  popularBox: {
+    width: windowWidth / 1.9,
+    height: verticalScale(240),
+    backgroundColor: colors.primary,
+    borderRadius: scale(10),
+    alignItems: "center",
+    paddingTop: verticalScale(55),
+    gap: verticalScale(30),
+  },
+  categoryContainer: {
+    borderRadius: 999,
+    height: verticalScale(30),
+    paddingHorizontal: scale(16),
+    alignItems: "center",
+    justifyContent: "center",
   },
 });

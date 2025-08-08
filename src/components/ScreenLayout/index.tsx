@@ -1,44 +1,24 @@
-import React from "react";
-import {
-  ImageBackground,
-  StyleSheet,
-  ViewStyle,
-  ImageSourcePropType,
-  SafeAreaView,
-  View,
-} from "react-native";
-import { theme } from "../../utils/Themes";
-import sizeHelper from "../../utils/Helpers";
-
-interface BackgroundContainerProps {
-  children: React.ReactNode;
-  style?: ViewStyle;
-  backgroundColor?: any;
-}
-
-const ScreenLayout: React.FC<BackgroundContainerProps> = ({
-  children,
-  style,
-  backgroundColor,
-}) => {
+import React from 'react';
+import {View, Text, Image, Platform} from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {appStyles} from '../../utils/AppStyles';
+import {verticalScale} from 'react-native-size-matters';
+const ScreenLayout = ({children, edges, style}: any) => {
   return (
-    <SafeAreaView
-      style={{
-        flex: 1,
-        backgroundColor: backgroundColor || theme.colors.background,
-        paddingTop:sizeHelper.calHp(20)
-      }}
-    >
-      <View style={[styles.container, style]}>{children}</View>
+    <SafeAreaView edges={['top', 'right', 'left']} style={appStyles.main}>
+      <View
+        style={[
+          {
+            ...appStyles.main,
+            paddingTop: verticalScale(Platform.OS == 'ios' ? 7 : 14),
+          },
+
+          style,
+        ]}>
+        {children}
+      </View>
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: theme.colors.background,
-  },
-});
 
 export default ScreenLayout;

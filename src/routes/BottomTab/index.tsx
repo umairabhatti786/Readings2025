@@ -1,63 +1,57 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {
-  Image,
-  Platform,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import CustomText from '../../components/Text';
-import {theme} from '../../utils/Themes';
-import sizeHelper from '../../utils/Helpers';
-import {fonts} from '../../utils/Themes/fonts';
-import {useSelector} from 'react-redux';
-import {getToken} from '../../redux/reducers/authReducer';
-import HomeScreen from '../../screens/Main/Home';
-import icons from '../../utils/Constants/icons';
-import WalletScreen from '../../screens/Main/Wallet/iindex';
-import ReportScreen from '../../screens/Main/Report';
-import SettingsScreen from '../../screens/Main/Settings';
-import AddScreen from '../../screens/Main/Add';
-import HomeStack from '../HomeStack';
+import {Image, Platform, StyleSheet, View} from 'react-native';
+import {colors} from '../../utils/colors';
+import {scale, verticalScale} from 'react-native-size-matters';
+import {images} from '../../assets/images';
+import CustomText from '../../components/CustomText';
+import HomeScreen from '../../screens/main/Home';
+import CategoriesScreen from '../../screens/main/Categories';
+import OrdersScreen from '../../screens/main/Orders';
+import CartScreen from '../../screens/main/Cart';
+import LikedScreen from '../../screens/main/Liked';
+import {font} from '../../utils/font';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
-const BottomTab = ({navigation}: any) => {
+const BottomTab = ({}: any) => {
   const Bottom = createBottomTabNavigator();
-  const token = useSelector(getToken);
 
   const TabItem = ({focused, title, img}: any) => {
     return (
-      <View style={[style.itemStyle]}>
-       
+      <View
+        style={{
+          ...style?.itemStyle,
+        }}>
         <Image
           resizeMode="contain"
           source={img}
           style={{
             ...style.img,
-            tintColor: focused ? theme.colors.primary : theme.colors.gray,
+            tintColor: focused ? colors.black : colors.grey,
           }}
         />
         <CustomText
           text={title}
-          // fontFam={fonts.Poppins_SemiBold}
-          fontWeight="600"
-          size={18}
-          color={focused ? theme.colors.primary : theme.colors.gray}
+          fontWeight="400"
+          fontFam={font.WorkSans_Light}
+          size={10}
+          color={focused ? colors.black : colors.grey}
         />
       </View>
     );
   };
 
   return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
+
     <Bottom.Navigator
-      initialRouteName="HomeStack"
+      initialRouteName="Home"
       screenOptions={({route}) => ({
         tabBarHideOnKeyboard: true,
         tabBarShowLabel: false,
         animationEnabled: false,
         gestureEnabled: true,
         keyboardHidesTabBar: true,
-
-        cardStyleInterpolator: ({current, next, layouts}: any) => {
+        cardStyleInterpolator: ({ current, next, layouts }:any) => {
           return {
             cardStyle: {
               transform: [
@@ -72,106 +66,62 @@ const BottomTab = ({navigation}: any) => {
           };
         },
         tabBarStyle: {
-          backgroundColor: theme.colors.white,
+          position: 'absolute',
+          backgroundColor: 'rgba(243, 245, 247, 0.9)', // Semi-transparent background
           justifyContent: 'center',
           alignItems: 'center',
-          shadowOffset: {width: 0, height: 5},
-          shadowOpacity: 1,
-          shadowColor: theme.colors.black,
-          shadowRadius: 4,
-          elevation: 10,
-          height: sizeHelper.calHp(140),
-          borderTopWidth: -1,
-          paddingTop: sizeHelper.calHp(30),
+          borderTopWidth: 1,
+          borderTopColor: colors.dull_half_white,
+          display: 'flex',
+          height: verticalScale(Platform.OS == 'ios' ? 75 : 70),
+          paddingHorizontal:scale(20)
         },
-
         headerShown: false,
       })}>
-      {/* Home Tab */}
-      <Bottom.Screen
-        name="HomeStack"
-        component={HomeStack}
+
+<Bottom.Screen
+        name="Home"
+        component={HomeScreen}
         options={{
+          headerShown: false,
           tabBarIcon: ({focused}) => {
             return (
               <TabItem
                 title={'Home'}
-                colors={theme.colors}
-                img={icons.home}
+                img={focused ? images.fill_home : images.unfill_home}
                 focused={focused}
               />
             );
           },
         }}
       />
-      {/* Calendar Tab */}
+      
       <Bottom.Screen
-        name="WalletScreen"
-        component={WalletScreen}
+        name="Categories"
+        component={CategoriesScreen}
         options={{
           headerShown: false,
           tabBarIcon: ({focused}) => {
             return (
               <TabItem
-                colors={theme.colors}
-                title={'Wallet'}
-                img={
-                 icons.wallet
-                }
+                title={'Categories'}
+                img={focused ? images.fill_add : images.add_unfill}
                 focused={focused}
               />
             );
           },
         }}
       />
-      {/* AddEvent Tab */}
-
-       <Bottom.Screen
-        name="AddScreen"
-        component={AddScreen}
-        options={{
-          headerShown: false,
-          tabBarIcon: ({focused}) => {
-            return (
-              <TouchableOpacity
-              onPress={() => navigation.navigate('AddScreen')}
-              style={{
-                height: sizeHelper.calHp(80),
-                width: sizeHelper.calHp(80),
-                borderRadius: sizeHelper.calWp(40),
-                backgroundColor: theme.colors.primary,
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginBottom:sizeHelper.calHp(20)
-              }}>
-              <Image
-                resizeMode="contain"
-                source={icons.add}
-                style={{
-                  height: sizeHelper.calHp(40),
-                  width: sizeHelper.calHp(40),
-                  tintColor: theme.colors.white,
-                }}
-              />
-            </TouchableOpacity>
-            );
-          },
-        }}
-      />
-
-       <Bottom.Screen
-        name="ReportScreen"
-        component={ReportScreen}
+      <Bottom.Screen
+        name="Orders"
+        component={OrdersScreen}
         options={{
           headerShown: false,
           tabBarIcon: ({focused}) => {
             return (
               <TabItem
-                colors={theme.colors}
-                title={'Report'}
-                img={
-                 icons.report
-                }
+                title={'Orders'}
+                img={focused ? images.fill_box : images.unfill_box}
                 focused={focused}
               />
             );
@@ -179,92 +129,61 @@ const BottomTab = ({navigation}: any) => {
         }}
       />
 
-<Bottom.Screen
-        name="SettingsScreen"
-        component={SettingsScreen}
+      <Bottom.Screen
+        name="Cart"
+        component={CartScreen}
         options={{
           headerShown: false,
           tabBarIcon: ({focused}) => {
             return (
               <TabItem
-                colors={theme.colors}
-                title={'Settings'}
-                img={
-                 icons.setting
-                }
+                title={'Cart'}
+                img={focused ? images.fill_cart : images.unfill_cart}
                 focused={focused}
               />
             );
           },
         }}
       />
-      {/* Contacts Tab */}
-      {/* <Bottom.Screen
-        name="MyCart"
-        component={MyCartScreen}
-        options={{
-          ...(cartLength === 0
-            ? {
-                tabBarBadge: '', // shows a small red dot
-                tabBarBadgeStyle: {
-                  backgroundColor: 'transparent',
-                },
-              }
-            : {
-                tabBarBadge: cartLength,
-                tabBarBadgeStyle: {
-                  backgroundColor: theme.colors.primary,
-                  color: theme.colors.white,
-                  top: sizeHelper.calHp(-20),
-                },
-              }),
-          tabBarIcon: ({focused}) => {
-            return (
-              <TabItem
-                colors={theme.colors}
-                title={'My Cart'}
-                img={icons.unfilled_cart}
-                focused={focused}
-              />
-            );
-          },
-        }}
-      /> */}
-      {/* profile Tab */}
-      {/* <Bottom.Screen
-        name="Profile"
-        component={token ? ProfileScreen : LoginAndSignupScreen}
+      <Bottom.Screen
+        name="Liked"
+        component={LikedScreen}
         options={{
           headerShown: false,
           tabBarIcon: ({focused}) => {
             return (
               <TabItem
-                colors={theme.colors}
-                title={'Profile'}
-                img={icons.unfilled_user}
+                title={'Liked'}
+                img={focused ? images.fill_heart : images.unfill_heart}
                 focused={focused}
               />
             );
           },
         }}
-      /> */}
+      />
     </Bottom.Navigator>
+
+    </GestureHandlerRootView>
+
   );
 };
 export default BottomTab;
 
 const style = StyleSheet.create({
   itemStyle: {
-    width: sizeHelper.calWp(130),
-    backgroundColor: 'transparent', // Semi-transparent background
+    width: scale(50),
+    backgroundColor: "transparent", // Semi-transparent background
+    paddingTop:verticalScale(Platform.OS=="ios"? 30:35),
+    paddingBottom:verticalScale(Platform.OS=="ios"? 0:5),
     justifyContent: 'center',
     alignItems: 'center',
-    alignSelf: 'center',
-    gap: sizeHelper.calHp(7),
+    gap: verticalScale(4),
+    
+    
   },
+
   img: {
-    height: sizeHelper.calHp(33),
-    width: sizeHelper.calHp(33),
+    height: scale(19),
+    width: scale(19),
   },
-  tabBarStyle: {},
 });
