@@ -56,6 +56,7 @@ import AbsoluateView from "../../../components/AbsoluateView";
 import Share from "react-native-share";
 import Clipboard from "@react-native-clipboard/clipboard";
 import SkeletonPlaceholder from "react-native-skeleton-placeholder";
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const BookDetail = ({ route }: any) => {
   const navigation: any = useNavigation();
@@ -63,7 +64,7 @@ const BookDetail = ({ route }: any) => {
   const OrderbottomSheetModalRef = useRef<any>(null);
   const [bookPriceData, setBookPriceData] = useState<any>();
 
-  const OrderSheetSnapPoints = useMemo(() => ["68%", "70%"], []);
+  const OrderSheetSnapPoints = useMemo(() => ["80%", "70%"], []);
   const [bookReview, setBookReview] = useState([]);
   const [rating, setRating] = useState(0);
   const [review, setReview] = useState("");
@@ -71,6 +72,7 @@ const BookDetail = ({ route }: any) => {
   const [orderId, setOrderId] = useState();
   const [priceLoading,setPriceLoading]=useState(true)
 
+  const insets = useSafeAreaInsets();
 
 
   let viewOrder = route?.params?.viewOrder;
@@ -522,7 +524,9 @@ const BookDetail = ({ route }: any) => {
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() => navigation.navigate("Cart")}
+          onPress={() => navigation.navigate("BottomTab", {
+            screen: "Cart",
+          })}
           style={styles.backContainer}
         >
           <Image
@@ -533,7 +537,7 @@ const BookDetail = ({ route }: any) => {
             resizeMode="contain"
             source={images.fill_cart}
           />
-          <View style={styles.cartContainer}>
+          {/* <View style={styles.cartContainer}>
             <CustomText
               text={"0"}
               color={colors.white}
@@ -541,7 +545,7 @@ const BookDetail = ({ route }: any) => {
               fontFam={font.WorkSans_SemiBold}
               size={11}
             />
-          </View>
+          </View> */}
         </TouchableOpacity>
       </View>
     );
@@ -551,12 +555,17 @@ const BookDetail = ({ route }: any) => {
     <BookDetailLayout />
   ) : (
     <>
-      <ScrollView
+    <View
+     style={{
+      // gap: verticalScale(20),
+      flex: 1,
+    }}
+    >
+
+    <ScrollView
         style={{ ...appStyles.main }}
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{
-          paddingBottom: verticalScale(15),
-        }}
+       
       >
         <View
           style={{
@@ -1224,13 +1233,19 @@ const BookDetail = ({ route }: any) => {
 
             )
           }
+
+
+
         
 
           
         </View>
       </ScrollView>
 
-      <View style={styles.bottomContainer}>
+      <View style={{...styles.bottomContainer,
+          paddingBottom: verticalScale(20),
+          bottom: Platform.OS=="ios"?0: insets.bottom
+      }}>
         {viewOrder ? (
           <View style={{ ...appStyles.rowjustify, width: "100%" }}>
             <CustomButton
@@ -1303,6 +1318,11 @@ const BookDetail = ({ route }: any) => {
           </>
         )}
       </View>
+
+    </View>
+    
+
+  
 
       <CustomBottomSheet
         snapPoints={
@@ -1495,12 +1515,13 @@ const styles = StyleSheet.create({
     width: "100%",
     paddingHorizontal: scale(20),
     paddingTop: verticalScale(10),
-    paddingBottom: verticalScale(30),
+
     backgroundColor: colors.dull_white,
     borderTopWidth: 1,
     borderTopColor: colors.dull_half_white,
     flexDirection: "row",
     alignItems: "center",
     gap: scale(10),
+  
   },
 });

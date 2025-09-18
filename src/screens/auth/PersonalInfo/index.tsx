@@ -19,7 +19,6 @@ import {appStyles} from '../../../utils/AppStyles';
 import DropDown from '../../../components/DropDown';
 import {CountryData} from '../../../utils/Data';
 import CustomCountryPicker from '../../../components/CustomCountryPicker';
-import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 
 const PersonalInfoScreen = ({navigation}: any) => {
   const [selectedCountry, setSelectedCountry] = useState('');
@@ -83,7 +82,7 @@ const PersonalInfoScreen = ({navigation}: any) => {
         country={country}
         setCountry={setCountry}
         placeholder="345 123 456 7" />
-        <View
+        {/* <View
           style={{
             width: '100%',
             height: verticalScale(150),
@@ -116,7 +115,7 @@ const PersonalInfoScreen = ({navigation}: any) => {
               source={images.location_center}
             />
           </TouchableOpacity>
-        </View>
+        </View> */}
 
         <View style={styles.continueBtnContainer}>
           <TouchableOpacity

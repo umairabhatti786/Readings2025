@@ -8,6 +8,9 @@ export const images = {
   google: require('../images/google.png'),
   apple: require('../images/apple.png'),
   logout: require('../images/logout.png'),
+
+  banner: require('../images/banner.jpeg'),
+
   facebook: require('../images/facebook.png'),
   visa: require('../images/visa.jpg'),
   cash: require('../images/cash.png'),

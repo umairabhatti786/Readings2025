@@ -7,6 +7,7 @@ import {
   Image,
   StyleSheet,
   Alert,
+  Platform,
 } from "react-native";
 import ScreenLayout from "../../../components/ScreenLayout";
 import { scale, verticalScale } from "react-native-size-matters";
@@ -577,10 +578,22 @@ const ProfileScreen = ({ navigation }: any) => {
                   />
                   <TouchableOpacity
                     activeOpacity={0.5}
-                    onPress={() =>
+                    onPress={() =>{
+
+                      if(Platform.OS=="android"){
+                        Alert.alert("Alert","This option will be available soon")
+                        
+          
+                        return
+          
+          
+                      }
+
                       navigation.navigate("AddPaymentMethod", {
                         disableSkip: true,
                       })
+                    }
+                     
                     }
                     style={{
                       ...appStyles.row,

@@ -28,9 +28,10 @@ type Props = {
   onPress?:any
   setQuantity?:any
   quantity?:any
+  our_price?:any
 };
 
-const CartContainer = ({data,setQuantity,quantity}: Props) => {
+const CartContainer = ({data,setQuantity,quantity,our_price}: Props) => {
   
   return (
     <View
@@ -101,8 +102,9 @@ const CartContainer = ({data,setQuantity,quantity}: Props) => {
           text={
             data?.currency == "Rs"
               ? `${data?.currency} ${data?.PRICE}`
-              : `${data?.currency} ${data?.PRICE} = ${data?.PAK_PRICE}`
+              : `${data?.currency} ${data?.PRICE}`
           }
+         
           color={colors.black}
           size={12}
         />
@@ -111,7 +113,7 @@ const CartContainer = ({data,setQuantity,quantity}: Props) => {
       <View style={appStyles.rowjustify}>
         <CustomText text={"Our Price"} color={colors.grey} size={12} />
         <CustomText
-          text={`Rs ${
+          text={our_price|| `Rs ${
             Number(data?.Discount) > 0
               ? Math.floor(
                   Number(data?.PAK_PRICE) -

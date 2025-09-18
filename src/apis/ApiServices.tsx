@@ -148,11 +148,7 @@ export const ApiServices = {
       headers: myHeaders,
       redirect: "follow",
     };
-    console.log(
-      "ckdnckdncd",
-      getApiUrl(URLS.ORDER_CONFIRMATION + `?orderId=${params?.id}`),
-      requestOptions
-    );
+  
     try {
       fetch(
         getApiUrl(URLS.ORDER_CONFIRMATION + `?orderId=${params?.id}`),
@@ -416,7 +412,6 @@ myHeaders.append("Content-Type", "application/json");
       body: params?.raw,
       redirect: "follow",
     };
-    console.log("ckdnckdnc",URLS.CAPTURE_AUTHORIZED_AMOUNT+`?pi_client_secret=${params?.pi_client_secret}`)
     try {
       fetch(URLS.CAPTURE_AUTHORIZED_AMOUNT+`?pi_client_secret=${params?.pi_client_secret}`, requestOptions)
         .then((response) => response.text())
@@ -730,7 +725,6 @@ const requestOptions = {
     };
     // ?book_id=
     // + `?book_id=${params?.id}`
-    console.log("ckdnck", getApiUrl2(URLS.CONVERT_PRICE + `/${id}`));
     try {
       fetch(getApiUrl2(URLS.CONVERT_PRICE + `/${id}`), requestOptions)
         .then((response) => response.text())

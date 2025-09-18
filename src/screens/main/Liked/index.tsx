@@ -14,6 +14,7 @@ import { LikedLayout } from "../../../utils/Loyout/LikedLayout";
 import CustomToast from "../../../components/CustomToast";
 import { images } from "../../../assets/images";
 import { STATUS_BAR_HEIGHT } from "../../../utils/CommonHooks";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const LikedScreen = ({ navigation }: any) => {
   const [data, setData] = useState([]);
@@ -21,18 +22,18 @@ const LikedScreen = ({ navigation }: any) => {
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
   const [isMessage, setIsMessage] = useState(false);
-  const scrollRef=useRef<any>()
-  const guestToken=useSelector(getGuestToken)
-  const focused=useIsFocused()
+  const scrollRef = useRef<any>();
+  const guestToken = useSelector(getGuestToken);
+  const focused = useIsFocused();
   // console.log("focused")
   useEffect(() => {
-    if(focused){
-      getWishlistBooks()
+    if (focused) {
+      getWishlistBooks();
     }
   }, [focused]);
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener('tabPress', (e:any) => {
+    const unsubscribe = navigation.addListener("tabPress", (e: any) => {
       const isFocused = navigation.isFocused();
       if (isFocused) {
         scrollRef.current?.scrollToOffset({ offset: 0, animated: true });
@@ -44,6 +45,7 @@ const LikedScreen = ({ navigation }: any) => {
   }, [navigation]);
 
   const getWishlistBooks = () => {
+    setLoading(true)
     let params = {
       page: 1,
       token: token,
@@ -90,7 +92,7 @@ const LikedScreen = ({ navigation }: any) => {
   };
   return (
     <>
-      <View
+      <SafeAreaView
         style={{
           gap: verticalScale(15),
           flex: 1,
@@ -99,71 +101,75 @@ const LikedScreen = ({ navigation }: any) => {
       >
         {loading ? (
           <View
-            style={{
-              paddingTop: verticalScale(Platform.OS=="ios"? 35:0),
-            }}
+          
           >
             <LikedLayout />
           </View>
         ) : (
-          <FlatList
-            data={data}
-            ref={scrollRef}
-            scrollEnabled={data.length > 0 ? true : false}
-            contentContainerStyle={{
-              gap: verticalScale(15),
-              paddingBottom: verticalScale(93),
-              paddingTop: verticalScale(Platform.OS=="ios"? 80:45),
-              paddingHorizontal: scale(20),
-            }}
-            renderItem={renderOrdersItem}
-            showsVerticalScrollIndicator={false}
-            ListEmptyComponent={
-              <View
-                style={{
-                  height: windowHeight,
-                  alignItems: "center",
-                  marginTop: verticalScale(60),
-                }}
-              >
-                <Image
+          <View style={{ flex: 1 }}>
+            <FlatList
+              data={data}
+              ref={scrollRef}
+              scrollEnabled={data.length > 0 ? true : false}
+              contentContainerStyle={{
+                gap: verticalScale(15),
+                paddingBottom: verticalScale(Platform.OS=="ios"?300: 200),
+                paddingTop: verticalScale(Platform.OS == "ios" ? 45 : 45),
+                paddingHorizontal: scale(20),
+              }}
+              renderItem={renderOrdersItem}
+              showsVerticalScrollIndicator={false}
+              ListEmptyComponent={
+                <View
                   style={{
-                    width: windowWidth / 1.1,
-                    height: windowHeight / 2.2,
+                    height: windowHeight,
+                    alignItems: "center",
+                    marginTop: verticalScale(60),
                   }}
-                  resizeMode="contain"
-                  source={images.empty_liked}
-                />
-                <CustomText
-                  text={ token==null?"You need to login.": "You haven’t added any books to the liked section."}
-                  size={14}
-                  style={{ width: windowWidth / 1.5, textAlign: "center" }}
-                  fontWeight="500"
-                  color={colors.black}
-                />
-              </View>
-            }
-            keyExtractor={(item, index) => index.toString()}
-          />
+                >
+                  <Image
+                    style={{
+                      width: windowWidth / 1.1,
+                      height: windowHeight / 2.2,
+                    }}
+                    resizeMode="contain"
+                    source={images.empty_liked}
+                  />
+                  <CustomText
+                    text={
+                      token == null
+                        ? "You need to login."
+                        : "You haven’t added any books to the liked section."
+                    }
+                    size={14}
+                    style={{ width: windowWidth / 1.5, textAlign: "center" }}
+                    fontWeight="500"
+                    color={colors.black}
+                  />
+                </View>
+              }
+              keyExtractor={(item, index) => index.toString()}
+            />
+
+            {!loading && (
+              <CustomHeader
+                containerStyle={{
+                  backgroundColor: "rgba(243, 245, 247, 0.9)", // Semi-transparent background,
+                  height: Platform.OS == "ios" ? verticalScale(35) : 50,
+                  width: "100%",
+                  position: "absolute",
+                  top: 0,
+                  paddingHorizontal: scale(20),
+                  paddingTop: verticalScale(Platform.OS == "ios" ? 0 : 0),
+                }}
+              />
+            )}
+          </View>
         )}
-      </View>
-      {!loading && (
-        <CustomHeader
-          containerStyle={{
-            backgroundColor: "rgba(243, 245, 247, 0.9)", // Semi-transparent background,
-            display: "flex",
-            height: verticalScale(Platform.OS=="ios"? 70:40),
-            width: "100%",
-            position: "absolute",
-            top: 0,
-            paddingHorizontal: scale(20),
-            paddingTop: verticalScale(Platform.OS=="ios"?  40:STATUS_BAR_HEIGHT),
-          }}
-        />
-      )}
+      </SafeAreaView>
 
       <CustomToast
-      marginBottom={70}
+        marginBottom={70}
         isVisable={isMessage}
         setIsVisable={setIsMessage}
         message={message}

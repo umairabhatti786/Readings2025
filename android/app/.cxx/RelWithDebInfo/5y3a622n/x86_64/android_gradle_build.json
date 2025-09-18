@@ -5,17 +5,14 @@
     "/Users/mac/Documents/Readings2025/node_modules/@react-native-community/geolocation/android/build/generated/source/codegen/jni/CMakeLists.txt",
     "/Users/mac/Documents/Readings2025/node_modules/@shopify/flash-list/android/build/generated/source/codegen/jni/CMakeLists.txt",
     "/Users/mac/Documents/Readings2025/node_modules/lottie-react-native/android/build/generated/source/codegen/jni/CMakeLists.txt",
-    "/Users/mac/Documents/Readings2025/node_modules/react-native-compressor/android/build/generated/source/codegen/jni/CMakeLists.txt",
     "/Users/mac/Documents/Readings2025/node_modules/react-native-date-picker/android/build/generated/source/codegen/jni/CMakeLists.txt",
     "/Users/mac/Documents/Readings2025/node_modules/react-native-gesture-handler/android/build/generated/source/codegen/jni/CMakeLists.txt",
-    "/Users/mac/Documents/Readings2025/node_modules/react-native-maps/android/src/main/jni/CMakeLists.txt",
     "/Users/mac/Documents/Readings2025/node_modules/react-native-permissions/android/build/generated/source/codegen/jni/CMakeLists.txt",
     "/Users/mac/Documents/Readings2025/node_modules/react-native-reanimated/android/build/generated/source/codegen/jni/CMakeLists.txt",
     "/Users/mac/Documents/Readings2025/node_modules/react-native-safe-area-context/android/src/main/jni/CMakeLists.txt",
     "/Users/mac/Documents/Readings2025/node_modules/react-native-screens/android/src/main/jni/CMakeLists.txt",
     "/Users/mac/Documents/Readings2025/node_modules/react-native-share/android/build/generated/source/codegen/jni/CMakeLists.txt",
     "/Users/mac/Documents/Readings2025/node_modules/react-native-svg/android/src/main/jni/CMakeLists.txt",
-    "/Users/mac/Documents/Readings2025/node_modules/react-native-webview/android/build/generated/source/codegen/jni/CMakeLists.txt",
     "/Users/mac/Documents/Readings2025/node_modules/react-native/ReactAndroid/cmake-utils/default-app-setup/CMakeLists.txt"
   ],
   "cleanCommandsComponents": [
@@ -47,30 +44,15 @@
         "/Users/mac/.gradle/caches/8.13/transforms/e702d807405e02934ddf4aeab8285ec0/transformed/react-android-0.79.1-release/prefab/modules/reactnative/libs/android.x86_64/libreactnative.so"
       ]
     },
-    "react_codegen_Compressor::@408161e29a6d5b274579": {
-      "toolchain": "toolchain",
-      "abi": "x86_64",
-      "artifactName": "react_codegen_Compressor"
-    },
     "react_codegen_RNCGeolocationSpec::@1b959fcb56e23f7716ba": {
       "toolchain": "toolchain",
       "abi": "x86_64",
       "artifactName": "react_codegen_RNCGeolocationSpec"
     },
-    "react_codegen_RNCWebViewSpec::@eb48929f9f7453740a6c": {
-      "toolchain": "toolchain",
-      "abi": "x86_64",
-      "artifactName": "react_codegen_RNCWebViewSpec"
-    },
     "react_codegen_RNDatePickerSpecs::@c00f981c6e74346c63d4": {
       "toolchain": "toolchain",
       "abi": "x86_64",
       "artifactName": "react_codegen_RNDatePickerSpecs"
-    },
-    "react_codegen_RNMapsSpecs::@5748abef1962d24942ec": {
-      "toolchain": "toolchain",
-      "abi": "x86_64",
-      "artifactName": "react_codegen_RNMapsSpecs"
     },
     "react_codegen_RNPermissionsSpec::@7ad697819b753921c957": {
       "toolchain": "toolchain",

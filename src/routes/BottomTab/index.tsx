@@ -11,15 +11,24 @@ import CartScreen from '../../screens/main/Cart';
 import LikedScreen from '../../screens/main/Liked';
 import {font} from '../../utils/font';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const BottomTab = ({}: any) => {
   const Bottom = createBottomTabNavigator();
+  const insets = useSafeAreaInsets();
+  console.log("ckbcd",insets )
 
   const TabItem = ({focused, title, img}: any) => {
     return (
       <View
         style={{
-          ...style?.itemStyle,
+          width: scale(50),
+          backgroundColor: "transparent", // Semi-transparent background
+          paddingTop:verticalScale(Platform.OS=="ios"? 30:25),
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: verticalScale(4),
+
         }}>
         <Image
           resizeMode="contain"
@@ -49,7 +58,7 @@ const BottomTab = ({}: any) => {
         tabBarHideOnKeyboard: true,
         tabBarShowLabel: false,
         animationEnabled: false,
-        gestureEnabled: true,
+        gestureEnabled: Platform.OS=="ios"?true:false,
         keyboardHidesTabBar: true,
         cardStyleInterpolator: ({ current, next, layouts }:any) => {
           return {
@@ -72,8 +81,8 @@ const BottomTab = ({}: any) => {
           alignItems: 'center',
           borderTopWidth: 1,
           borderTopColor: colors.dull_half_white,
-          display: 'flex',
-          height: verticalScale(Platform.OS == 'ios' ? 75 : 70),
+          bottom: Platform.OS=="ios"?0: insets.bottom,
+          height: Platform.OS == 'ios'?verticalScale( 75):72,
           paddingHorizontal:scale(20)
         },
         headerShown: false,
@@ -174,7 +183,7 @@ const style = StyleSheet.create({
     width: scale(50),
     backgroundColor: "transparent", // Semi-transparent background
     paddingTop:verticalScale(Platform.OS=="ios"? 30:35),
-    paddingBottom:verticalScale(Platform.OS=="ios"? 0:5),
+    // paddingBottom:verticalScale(Platform.OS=="ios"? 0:5),
     justifyContent: 'center',
     alignItems: 'center',
     gap: verticalScale(4),

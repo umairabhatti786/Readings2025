@@ -73,7 +73,6 @@ const LikedCard = ({
   const token = useSelector(getToken);
   const guestToken = useSelector(getGuestToken);
   const guestUserToken = useSelector(getGuestToken);
-  console.log("bookPriceData", bookPriceData);
 
   useEffect(() => {
     if (isCart) {
@@ -87,7 +86,6 @@ const LikedCard = ({
 
   //   setIsWishlist(data?.isInWishlist)
   // }, [data]);
-  console.log("ckldnkcd", typeof data?.isInWishlist);
   const getSubTotal = () => {
     const newSubtotal =
       Number(data?.Discount) > 0
@@ -104,7 +102,6 @@ const LikedCard = ({
 
   const getConvertedPrice = () => {
     setPriceLoading(true);
-    console.log("data?.Book_Id", data?.Book_Id);
     ApiServices.ConvertBookPrice(
       data?.Book_Id,
       async ({ isSuccess, response }: any) => {
@@ -276,7 +273,6 @@ const LikedCard = ({
       data: raw,
       token: token != null ? token : guestUserToken,
     };
-    console.log("data?.Book_Id", data?.Book_Id);
     ApiServices.AddToCartItem(
       params,
       async ({ isSuccess, response, guestToken }: any) => {
@@ -338,6 +334,8 @@ const LikedCard = ({
       <ImageBackground
         style={styles.bookImage}
         resizeMethod="scale"
+        resizeMode="stretch"
+
         source={{ uri: `${URLS.IMAGE_URL}/images/${data?.picname}.webp` }}
       >
         <View
@@ -362,9 +360,10 @@ const LikedCard = ({
       </ImageBackground>
       <View
         style={{
-          padding: scale(10),
+          paddingHorizontal: scale(10),
+          paddingVertical:verticalScale(7),
           flex: 1,
-          gap: verticalScale(7),
+          gap: verticalScale(5),
         }}
       >
         <View style={{ gap: scale(2), paddingTop: verticalScale(3) }}>
@@ -587,7 +586,7 @@ const styles = StyleSheet.create({
   },
   bookImage: {
     width: windowWidth / 3.4,
-    height: verticalScale(150),
+    minHeight: verticalScale(130),
     alignItems: "center",
     justifyContent: "center",
   },

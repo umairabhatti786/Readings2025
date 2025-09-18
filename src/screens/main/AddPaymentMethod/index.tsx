@@ -32,10 +32,9 @@ import {
   StorageServices,
 } from "../../../utils/StorageService";
 import CustomToast from "../../../components/CustomToast";
-import {
-  XPayProvider,
-  PaymentElement,
-} from "@xstak/xpay-element-react-native-stage";
+import { XPayProvider, PaymentElement, JazzCashPaymentElement, EasyPaisaPaymentElement } from '@xstak/xpay-element-react-native';
+
+
 import { URLS } from "../../../apis/Urls";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
@@ -102,7 +101,7 @@ const AddPaymentMethod = ({ navigation, route }: any) => {
   console.log("showFields", showFields);
 
   const buttonEnable = () => {
-    if (enabled && cardHolderName.length > 0) {
+    if (enabled) {
       return false;
     }
     return true;
@@ -146,7 +145,7 @@ const AddPaymentMethod = ({ navigation, route }: any) => {
     const dispatchPayment = await StorageServices.getItem(PAYMENT_METHOD);
     // setSelectedMethod(selectedAddress);
     if (dispatchPayment == null) {
-      setSelectedMethod({ title: "Card", label: "card", id: 1 });
+      setSelectedMethod({ title: "Cash on Delivery", label: "card", id: 1 });
       setSelectedPaymentMethod("online payment");
       setSelectedOnlinePayment("card");
     } else {
@@ -171,9 +170,8 @@ const AddPaymentMethod = ({ navigation, route }: any) => {
       paymentMethod: "card",
       customer: {
         email: token != null ? authData?.email : guestEmail,
-        name: cardHolderName,
-
-        // name:token != null? `${authData?.first_name} ${authData?.last_name}`:isBillingAddress?`${authBillingAddress?.Name}`:`${authLatestAddress?.Name}`,
+        // name: cardHolderName,
+        name:token != null? `${authData?.first_name} ${authData?.last_name}`:isBillingAddress?`${authBillingAddress?.Name}`:`${authLatestAddress?.Name}`,
       },
     });
     let param = {
@@ -189,18 +187,19 @@ const AddPaymentMethod = ({ navigation, route }: any) => {
           setEnabled(true);
 
           let customer = {
-            name: cardHolderName,
+            name:token != null? `${authData?.first_name} ${authData?.last_name}`:isBillingAddress?`${authBillingAddress?.Name}`:`${authLatestAddress?.Name}`,
           };
 
           if (intentResult?.clientSecret) {
             try {
+              
               const { message, error, card } =
                 await PaymentElement.confirmPayment(
                   intentResult?.clientSecret,
                   customer
                 );
               setEnabled(true);
-              console.log("ResultCard", card);
+              console.log("ResultCard", card,error);
 
               const refundRaw = JSON.stringify({
                 paymentIntentId: intentResult?.paymentIntentId,
@@ -258,6 +257,11 @@ const AddPaymentMethod = ({ navigation, route }: any) => {
                             // setPaymentMethods(result?.data?.paymentMethods);
                             // setloading(false);
                           } else {
+                            navigation.setOptions({
+                              gestureEnabled: true, // Disable swipe back when true
+                            });
+                            setlaoding(false);
+                            setEnabled(false);
                             // setloading(false);
                             // setIsMessage(true);
                             // setMessage(result?.error);
@@ -282,8 +286,14 @@ const AddPaymentMethod = ({ navigation, route }: any) => {
               );
 
               console.log("PaymentElement Response", message);
-            } catch (err) {
-              console.error("❌ Payment failed or no message received:", err);
+            } catch (err:any) {
+              navigation.setOptions({
+                gestureEnabled: true, // Disable swipe back when true
+              });
+              setlaoding(false);
+              setMessage("Couldn't save card, please try again");
+              setIsMessage(true);
+              console.log("❌ Payment failed or no message received:", err);
             }
 
             console.log("MessageResponse", message);
@@ -425,40 +435,15 @@ const AddPaymentMethod = ({ navigation, route }: any) => {
         >
           <TopHeader title="Add a Credit or debit card" />
           <View style={{ flex: 1, gap: verticalScale(10) }}>
-            {showFields && (
-              <View
-                style={{
-                  gap: verticalScale(10),
-                }}
-              >
-                <CustomText
-                  color={colors.dark_grey}
-                  text={"Name on Card"}
-                  size={15}
-                />
-
-                <CustomInput
-                  fontWeight={"400"}
-                  height={verticalScale(30)}
-                  borderColor={colors.dull_half_white}
-                  placeholder=""
-                  placeholderTextColor={colors.dark_grey}
-                  backgroundColor={"transparent"}
-                  borderWidth={1}
-                  borderRadius={scale(5)}
-                  value={cardHolderName}
-                  onChangeText={(txt: string) => setCardHolderName(txt)}
-                />
-              </View>
-            )}
+        
 
             <XPayProvider
               xpay={{
                 publishableKey:
-                  "xpay_pk_test_216fd9d6154c9bbced04e31c0532ad53c39f6528d3bea515455ac3d00bab12e7",
+                  "xpay_pk_live_d43f543f624510f98adc60e1931bc3dfca3df0517136ead3844800dd7c1f2e3a",
                 hmacSecret:
-                  "87772484ac5b2e2daf751d5be8dbfe8f58b39c622f97ce2ed9929343999d18b4",
-                accountId: "81b7c9fa30726c4e",
+                  "c94e53c5dd0d873f06517a7788231925e1c7fe2d02793e804751d1b87bd94aef",
+                accountId: "aa6dac1dde473be4",
               }}
             >
               
@@ -477,12 +462,8 @@ const AddPaymentMethod = ({ navigation, route }: any) => {
                 }}
 
                 onReady={(data:any) => {
-                  setShowFields(true);
-                  if (!laoding) {
-                    setEnabled(data.complete);
-                  } else {
-                    setEnabled(true);
-                  }
+                  setEnabled(data.complete);
+
                   console.log("Comepletev", data.complete);
                 }}
               />

@@ -137,31 +137,6 @@ if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
   file(TOUCH_NOCREATE "/Users/mac/Documents/Readings2025/android/app/.cxx/RelWithDebInfo/5y3a622n/x86_64/CMakeFiles/cmake.verify_globs")
 endif()
 
-# react_codegen_SRCS at /Users/mac/Documents/Readings2025/node_modules/react-native-compressor/android/build/generated/source/codegen/jni/CMakeLists.txt:9 (file)
-file(GLOB NEW_GLOB LIST_DIRECTORIES true "/Users/mac/Documents/Readings2025/node_modules/react-native-compressor/android/build/generated/source/codegen/jni/*.cpp")
-set(OLD_GLOB
-  "/Users/mac/Documents/Readings2025/node_modules/react-native-compressor/android/build/generated/source/codegen/jni/Compressor-generated.cpp"
-  )
-if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
-  message("-- GLOB mismatch!")
-  file(TOUCH_NOCREATE "/Users/mac/Documents/Readings2025/android/app/.cxx/RelWithDebInfo/5y3a622n/x86_64/CMakeFiles/cmake.verify_globs")
-endif()
-
-# react_codegen_SRCS at /Users/mac/Documents/Readings2025/node_modules/react-native-compressor/android/build/generated/source/codegen/jni/CMakeLists.txt:9 (file)
-file(GLOB NEW_GLOB LIST_DIRECTORIES true "/Users/mac/Documents/Readings2025/node_modules/react-native-compressor/android/build/generated/source/codegen/jni/react/renderer/components/Compressor/*.cpp")
-set(OLD_GLOB
-  "/Users/mac/Documents/Readings2025/node_modules/react-native-compressor/android/build/generated/source/codegen/jni/react/renderer/components/Compressor/ComponentDescriptors.cpp"
-  "/Users/mac/Documents/Readings2025/node_modules/react-native-compressor/android/build/generated/source/codegen/jni/react/renderer/components/Compressor/CompressorJSI-generated.cpp"
-  "/Users/mac/Documents/Readings2025/node_modules/react-native-compressor/android/build/generated/source/codegen/jni/react/renderer/components/Compressor/EventEmitters.cpp"
-  "/Users/mac/Documents/Readings2025/node_modules/react-native-compressor/android/build/generated/source/codegen/jni/react/renderer/components/Compressor/Props.cpp"
-  "/Users/mac/Documents/Readings2025/node_modules/react-native-compressor/android/build/generated/source/codegen/jni/react/renderer/components/Compressor/ShadowNodes.cpp"
-  "/Users/mac/Documents/Readings2025/node_modules/react-native-compressor/android/build/generated/source/codegen/jni/react/renderer/components/Compressor/States.cpp"
-  )
-if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
-  message("-- GLOB mismatch!")
-  file(TOUCH_NOCREATE "/Users/mac/Documents/Readings2025/android/app/.cxx/RelWithDebInfo/5y3a622n/x86_64/CMakeFiles/cmake.verify_globs")
-endif()
-
 # react_codegen_SRCS at /Users/mac/Documents/Readings2025/node_modules/react-native-date-picker/android/build/generated/source/codegen/jni/CMakeLists.txt:9 (file)
 file(GLOB NEW_GLOB LIST_DIRECTORIES true "/Users/mac/Documents/Readings2025/node_modules/react-native-date-picker/android/build/generated/source/codegen/jni/*.cpp")
 set(OLD_GLOB
@@ -206,31 +181,6 @@ set(OLD_GLOB
   "/Users/mac/Documents/Readings2025/node_modules/react-native-gesture-handler/android/build/generated/source/codegen/jni/react/renderer/components/rngesturehandler_codegen/ShadowNodes.cpp"
   "/Users/mac/Documents/Readings2025/node_modules/react-native-gesture-handler/android/build/generated/source/codegen/jni/react/renderer/components/rngesturehandler_codegen/States.cpp"
   "/Users/mac/Documents/Readings2025/node_modules/react-native-gesture-handler/android/build/generated/source/codegen/jni/react/renderer/components/rngesturehandler_codegen/rngesturehandler_codegenJSI-generated.cpp"
-  )
-if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
-  message("-- GLOB mismatch!")
-  file(TOUCH_NOCREATE "/Users/mac/Documents/Readings2025/android/app/.cxx/RelWithDebInfo/5y3a622n/x86_64/CMakeFiles/cmake.verify_globs")
-endif()
-
-# react_codegen_SRCS at /Users/mac/Documents/Readings2025/node_modules/react-native-maps/android/src/main/jni/CMakeLists.txt:9 (file)
-file(GLOB NEW_GLOB LIST_DIRECTORIES true "/Users/mac/Documents/Readings2025/node_modules/react-native-maps/android/src/main/jni/*.cpp")
-set(OLD_GLOB
-  "/Users/mac/Documents/Readings2025/node_modules/react-native-maps/android/src/main/jni/RNMapsSpecs-generated.cpp"
-  )
-if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
-  message("-- GLOB mismatch!")
-  file(TOUCH_NOCREATE "/Users/mac/Documents/Readings2025/android/app/.cxx/RelWithDebInfo/5y3a622n/x86_64/CMakeFiles/cmake.verify_globs")
-endif()
-
-# react_codegen_SRCS at /Users/mac/Documents/Readings2025/node_modules/react-native-maps/android/src/main/jni/CMakeLists.txt:9 (file)
-file(GLOB NEW_GLOB LIST_DIRECTORIES true "/Users/mac/Documents/Readings2025/node_modules/react-native-maps/android/src/main/jni/react/renderer/components/RNMapsSpecs/*.cpp")
-set(OLD_GLOB
-  "/Users/mac/Documents/Readings2025/node_modules/react-native-maps/android/src/main/jni/react/renderer/components/RNMapsSpecs/ComponentDescriptors.cpp"
-  "/Users/mac/Documents/Readings2025/node_modules/react-native-maps/android/src/main/jni/react/renderer/components/RNMapsSpecs/EventEmitters.cpp"
-  "/Users/mac/Documents/Readings2025/node_modules/react-native-maps/android/src/main/jni/react/renderer/components/RNMapsSpecs/Props.cpp"
-  "/Users/mac/Documents/Readings2025/node_modules/react-native-maps/android/src/main/jni/react/renderer/components/RNMapsSpecs/RNMapsSpecsJSI-generated.cpp"
-  "/Users/mac/Documents/Readings2025/node_modules/react-native-maps/android/src/main/jni/react/renderer/components/RNMapsSpecs/ShadowNodes.cpp"
-  "/Users/mac/Documents/Readings2025/node_modules/react-native-maps/android/src/main/jni/react/renderer/components/RNMapsSpecs/States.cpp"
   )
 if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
   message("-- GLOB mismatch!")
@@ -287,7 +237,7 @@ if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
   file(TOUCH_NOCREATE "/Users/mac/Documents/Readings2025/android/app/.cxx/RelWithDebInfo/5y3a622n/x86_64/CMakeFiles/cmake.verify_globs")
 endif()
 
-# LIB_CUSTOM_SRCS at /Users/mac/Documents/Readings2025/node_modules/react-native-safe-area-context/android/src/main/jni/CMakeLists.txt:22 (file)
+# LIB_CUSTOM_SRCS at /Users/mac/Documents/Readings2025/node_modules/react-native-safe-area-context/android/src/main/jni/CMakeLists.txt:12 (file)
 file(GLOB NEW_GLOB LIST_DIRECTORIES true "/Users/mac/Documents/Readings2025/node_modules/react-native-safe-area-context/android/src/main/jni/*.cpp")
 set(OLD_GLOB
   )
@@ -296,7 +246,7 @@ if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
   file(TOUCH_NOCREATE "/Users/mac/Documents/Readings2025/android/app/.cxx/RelWithDebInfo/5y3a622n/x86_64/CMakeFiles/cmake.verify_globs")
 endif()
 
-# LIB_CUSTOM_SRCS at /Users/mac/Documents/Readings2025/node_modules/react-native-safe-area-context/android/src/main/jni/CMakeLists.txt:22 (file)
+# LIB_CUSTOM_SRCS at /Users/mac/Documents/Readings2025/node_modules/react-native-safe-area-context/android/src/main/jni/CMakeLists.txt:12 (file)
 file(GLOB NEW_GLOB LIST_DIRECTORIES true "/Users/mac/Documents/Readings2025/node_modules/react-native-safe-area-context/android/src/main/jni/../../../../common/cpp/react/renderer/components/safeareacontext/*.cpp")
 set(OLD_GLOB
   "/Users/mac/Documents/Readings2025/node_modules/react-native-safe-area-context/android/src/main/jni/../../../../common/cpp/react/renderer/components/safeareacontext/RNCSafeAreaViewShadowNode.cpp"
@@ -307,7 +257,7 @@ if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
   file(TOUCH_NOCREATE "/Users/mac/Documents/Readings2025/android/app/.cxx/RelWithDebInfo/5y3a622n/x86_64/CMakeFiles/cmake.verify_globs")
 endif()
 
-# LIB_CODEGEN_SRCS at /Users/mac/Documents/Readings2025/node_modules/react-native-safe-area-context/android/src/main/jni/CMakeLists.txt:23 (file)
+# LIB_CODEGEN_SRCS at /Users/mac/Documents/Readings2025/node_modules/react-native-safe-area-context/android/src/main/jni/CMakeLists.txt:13 (file)
 file(GLOB NEW_GLOB LIST_DIRECTORIES true "/Users/mac/Documents/Readings2025/node_modules/react-native-safe-area-context/android/src/main/jni/../../../build/generated/source/codegen/jni/*.cpp")
 set(OLD_GLOB
   "/Users/mac/Documents/Readings2025/node_modules/react-native-safe-area-context/android/src/main/jni/../../../build/generated/source/codegen/jni/safeareacontext-generated.cpp"
@@ -317,7 +267,7 @@ if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
   file(TOUCH_NOCREATE "/Users/mac/Documents/Readings2025/android/app/.cxx/RelWithDebInfo/5y3a622n/x86_64/CMakeFiles/cmake.verify_globs")
 endif()
 
-# LIB_CODEGEN_SRCS at /Users/mac/Documents/Readings2025/node_modules/react-native-safe-area-context/android/src/main/jni/CMakeLists.txt:23 (file)
+# LIB_CODEGEN_SRCS at /Users/mac/Documents/Readings2025/node_modules/react-native-safe-area-context/android/src/main/jni/CMakeLists.txt:13 (file)
 file(GLOB NEW_GLOB LIST_DIRECTORIES true "/Users/mac/Documents/Readings2025/node_modules/react-native-safe-area-context/android/src/main/jni/../../../build/generated/source/codegen/jni/react/renderer/components/safeareacontext/*.cpp")
 set(OLD_GLOB
   "/Users/mac/Documents/Readings2025/node_modules/react-native-safe-area-context/android/src/main/jni/../../../build/generated/source/codegen/jni/react/renderer/components/safeareacontext/ComponentDescriptors.cpp"
@@ -345,6 +295,8 @@ endif()
 # LIB_CUSTOM_SRCS at /Users/mac/Documents/Readings2025/node_modules/react-native-screens/android/src/main/jni/CMakeLists.txt:23 (file)
 file(GLOB NEW_GLOB LIST_DIRECTORIES true "/Users/mac/Documents/Readings2025/node_modules/react-native-screens/android/src/main/jni/../../../../common/cpp/react/renderer/components/rnscreens/*.cpp")
 set(OLD_GLOB
+  "/Users/mac/Documents/Readings2025/node_modules/react-native-screens/android/src/main/jni/../../../../common/cpp/react/renderer/components/rnscreens/RNSBottomTabsShadowNode.cpp"
+  "/Users/mac/Documents/Readings2025/node_modules/react-native-screens/android/src/main/jni/../../../../common/cpp/react/renderer/components/rnscreens/RNSBottomTabsState.cpp"
   "/Users/mac/Documents/Readings2025/node_modules/react-native-screens/android/src/main/jni/../../../../common/cpp/react/renderer/components/rnscreens/RNSFullWindowOverlayShadowNode.cpp"
   "/Users/mac/Documents/Readings2025/node_modules/react-native-screens/android/src/main/jni/../../../../common/cpp/react/renderer/components/rnscreens/RNSModalScreenShadowNode.cpp"
   "/Users/mac/Documents/Readings2025/node_modules/react-native-screens/android/src/main/jni/../../../../common/cpp/react/renderer/components/rnscreens/RNSScreenShadowNode.cpp"
@@ -353,6 +305,7 @@ set(OLD_GLOB
   "/Users/mac/Documents/Readings2025/node_modules/react-native-screens/android/src/main/jni/../../../../common/cpp/react/renderer/components/rnscreens/RNSScreenStackHeaderSubviewShadowNode.cpp"
   "/Users/mac/Documents/Readings2025/node_modules/react-native-screens/android/src/main/jni/../../../../common/cpp/react/renderer/components/rnscreens/RNSScreenStackHeaderSubviewState.cpp"
   "/Users/mac/Documents/Readings2025/node_modules/react-native-screens/android/src/main/jni/../../../../common/cpp/react/renderer/components/rnscreens/RNSScreenState.cpp"
+  "/Users/mac/Documents/Readings2025/node_modules/react-native-screens/android/src/main/jni/../../../../common/cpp/react/renderer/components/rnscreens/RNSSplitViewScreenShadowNode.cpp"
   )
 if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
   message("-- GLOB mismatch!")
@@ -408,7 +361,7 @@ if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
   file(TOUCH_NOCREATE "/Users/mac/Documents/Readings2025/android/app/.cxx/RelWithDebInfo/5y3a622n/x86_64/CMakeFiles/cmake.verify_globs")
 endif()
 
-# rnsvg_SRCS at /Users/mac/Documents/Readings2025/node_modules/react-native-svg/android/src/main/jni/CMakeLists.txt:25 (file)
+# rnsvg_SRCS at /Users/mac/Documents/Readings2025/node_modules/react-native-svg/android/src/main/jni/CMakeLists.txt:10 (file)
 file(GLOB NEW_GLOB LIST_DIRECTORIES true "/Users/mac/Documents/Readings2025/node_modules/react-native-svg/android/src/main/jni/*.cpp")
 set(OLD_GLOB
   "/Users/mac/Documents/Readings2025/node_modules/react-native-svg/android/src/main/jni/rnsvg.cpp"
@@ -418,7 +371,7 @@ if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
   file(TOUCH_NOCREATE "/Users/mac/Documents/Readings2025/android/app/.cxx/RelWithDebInfo/5y3a622n/x86_64/CMakeFiles/cmake.verify_globs")
 endif()
 
-# rnsvg_SRCS at /Users/mac/Documents/Readings2025/node_modules/react-native-svg/android/src/main/jni/CMakeLists.txt:25 (file)
+# rnsvg_SRCS at /Users/mac/Documents/Readings2025/node_modules/react-native-svg/android/src/main/jni/CMakeLists.txt:10 (file)
 file(GLOB NEW_GLOB LIST_DIRECTORIES true "/Users/mac/Documents/Readings2025/node_modules/react-native-svg/android/src/main/jni/../../../../common/cpp/react/renderer/components/rnsvg/*.cpp")
 set(OLD_GLOB
   "/Users/mac/Documents/Readings2025/node_modules/react-native-svg/android/src/main/jni/../../../../common/cpp/react/renderer/components/rnsvg/RNSVGImageShadowNode.cpp"
@@ -431,7 +384,7 @@ if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
   file(TOUCH_NOCREATE "/Users/mac/Documents/Readings2025/android/app/.cxx/RelWithDebInfo/5y3a622n/x86_64/CMakeFiles/cmake.verify_globs")
 endif()
 
-# rnsvg_codegen_SRCS at /Users/mac/Documents/Readings2025/node_modules/react-native-svg/android/src/main/jni/CMakeLists.txt:26 (file)
+# rnsvg_codegen_SRCS at /Users/mac/Documents/Readings2025/node_modules/react-native-svg/android/src/main/jni/CMakeLists.txt:11 (file)
 file(GLOB NEW_GLOB LIST_DIRECTORIES true "/Users/mac/Documents/Readings2025/node_modules/react-native-svg/android/src/main/jni/../../../build/generated/source/codegen/jni/react/renderer/components/rnsvg/*cpp")
 set(OLD_GLOB
   "/Users/mac/Documents/Readings2025/node_modules/react-native-svg/android/src/main/jni/../../../build/generated/source/codegen/jni/react/renderer/components/rnsvg/ComponentDescriptors.cpp"
@@ -440,31 +393,6 @@ set(OLD_GLOB
   "/Users/mac/Documents/Readings2025/node_modules/react-native-svg/android/src/main/jni/../../../build/generated/source/codegen/jni/react/renderer/components/rnsvg/ShadowNodes.cpp"
   "/Users/mac/Documents/Readings2025/node_modules/react-native-svg/android/src/main/jni/../../../build/generated/source/codegen/jni/react/renderer/components/rnsvg/States.cpp"
   "/Users/mac/Documents/Readings2025/node_modules/react-native-svg/android/src/main/jni/../../../build/generated/source/codegen/jni/react/renderer/components/rnsvg/rnsvgJSI-generated.cpp"
-  )
-if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
-  message("-- GLOB mismatch!")
-  file(TOUCH_NOCREATE "/Users/mac/Documents/Readings2025/android/app/.cxx/RelWithDebInfo/5y3a622n/x86_64/CMakeFiles/cmake.verify_globs")
-endif()
-
-# react_codegen_SRCS at /Users/mac/Documents/Readings2025/node_modules/react-native-webview/android/build/generated/source/codegen/jni/CMakeLists.txt:9 (file)
-file(GLOB NEW_GLOB LIST_DIRECTORIES true "/Users/mac/Documents/Readings2025/node_modules/react-native-webview/android/build/generated/source/codegen/jni/*.cpp")
-set(OLD_GLOB
-  "/Users/mac/Documents/Readings2025/node_modules/react-native-webview/android/build/generated/source/codegen/jni/RNCWebViewSpec-generated.cpp"
-  )
-if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
-  message("-- GLOB mismatch!")
-  file(TOUCH_NOCREATE "/Users/mac/Documents/Readings2025/android/app/.cxx/RelWithDebInfo/5y3a622n/x86_64/CMakeFiles/cmake.verify_globs")
-endif()
-
-# react_codegen_SRCS at /Users/mac/Documents/Readings2025/node_modules/react-native-webview/android/build/generated/source/codegen/jni/CMakeLists.txt:9 (file)
-file(GLOB NEW_GLOB LIST_DIRECTORIES true "/Users/mac/Documents/Readings2025/node_modules/react-native-webview/android/build/generated/source/codegen/jni/react/renderer/components/RNCWebViewSpec/*.cpp")
-set(OLD_GLOB
-  "/Users/mac/Documents/Readings2025/node_modules/react-native-webview/android/build/generated/source/codegen/jni/react/renderer/components/RNCWebViewSpec/ComponentDescriptors.cpp"
-  "/Users/mac/Documents/Readings2025/node_modules/react-native-webview/android/build/generated/source/codegen/jni/react/renderer/components/RNCWebViewSpec/EventEmitters.cpp"
-  "/Users/mac/Documents/Readings2025/node_modules/react-native-webview/android/build/generated/source/codegen/jni/react/renderer/components/RNCWebViewSpec/Props.cpp"
-  "/Users/mac/Documents/Readings2025/node_modules/react-native-webview/android/build/generated/source/codegen/jni/react/renderer/components/RNCWebViewSpec/RNCWebViewSpecJSI-generated.cpp"
-  "/Users/mac/Documents/Readings2025/node_modules/react-native-webview/android/build/generated/source/codegen/jni/react/renderer/components/RNCWebViewSpec/ShadowNodes.cpp"
-  "/Users/mac/Documents/Readings2025/node_modules/react-native-webview/android/build/generated/source/codegen/jni/react/renderer/components/RNCWebViewSpec/States.cpp"
   )
 if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
   message("-- GLOB mismatch!")

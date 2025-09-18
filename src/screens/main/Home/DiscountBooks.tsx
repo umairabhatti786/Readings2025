@@ -48,7 +48,7 @@ const slides = [
 ];
 
 const DiscountBooks = () => {
-  const AUTO_SCROLL_INTERVAL = 3000; // 3 seconds
+  const AUTO_SCROLL_INTERVAL = 5000; // 3 seconds
 
   const flatListRef = useRef(null);
   const scrollX = useRef(new Animated.Value(0)).current;

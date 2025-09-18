@@ -19,7 +19,6 @@ type Props = {
   onPress?: () => void;
 };
 const OrderCard = ({ data, onPress }: Props) => {
-  console.log("ckdnck",data?.status)
   return (
     <View
       style={{

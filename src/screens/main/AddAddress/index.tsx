@@ -21,7 +21,6 @@ import { appStyles } from "../../../utils/AppStyles";
 import DropDown from "../../../components/DropDown";
 import { CountryData } from "../../../utils/Data";
 import CustomCountryPicker from "../../../components/CustomCountryPicker";
-import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 import { numericRegex, phoneRegex } from "../../../utils/Regex";
 import { ApiServices } from "../../../apis/ApiServices";
 import AbsoluateView from "../../../components/AbsoluateView";
@@ -43,6 +42,7 @@ import { useIsFocused } from "@react-navigation/native";
 import { parsePhoneNumber } from "libphonenumber-js";
 import { getFormattedPhoneNumber } from "../../../utils/CommonHooks";
 import { GUESTTOKEN, StorageServices } from "../../../utils/StorageService";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 const AddAddressScreen = ({ navigation, route }: any) => {
   const [selectedCountry, setSelectedCountry] = useState("");
@@ -102,9 +102,8 @@ const AddAddressScreen = ({ navigation, route }: any) => {
     GetGuestToken();
   }, [isFocused]);
   useEffect(() => {
-
-//     const fullName = "umair abbas";
-// const [firstName, lastName] = fullName.split(" ");
+    //     const fullName = "umair abbas";
+    // const [firstName, lastName] = fullName.split(" ");
     setValues({
       ...values,
 
@@ -291,28 +290,35 @@ const AddAddressScreen = ({ navigation, route }: any) => {
 
   return (
     <>
-      <ScreenLayout
-        style={{
-          paddingHorizontal: scale(20),
-        }}
-      >
-        <View style={{ paddingBottom: verticalScale(10) }}>
-          <TopHeader title={isEdit ? "Edit Address" : "New Address"} />
-        </View>
-
-        <ScrollView
+      <KeyboardAwareScrollView
           showsVerticalScrollIndicator={false}
+          enableAutomaticScroll
+          keyboardShouldPersistTaps="handled"
           style={{
-            backgroundColor: colors.dull_white,
             flex: 1,
-            paddingTop: verticalScale(10),
+            backgroundColor: colors.dull_white,
           }}
           contentContainerStyle={{
             backgroundColor: colors.dull_white,
             gap: verticalScale(20),
             paddingBottom: verticalScale(40),
           }}
-        >
+          enableOnAndroid={true}
+          extraScrollHeight={verticalScale(50)} // give some space above keyboard
+          >
+
+      <ScreenLayout
+        style={{
+          paddingHorizontal: scale(20),
+          gap: verticalScale(20),
+
+        }}
+      >
+        <View style={{ paddingBottom: verticalScale(10) }}>
+          <TopHeader title={isEdit ? "Edit Address" : "New Address"} />
+        </View>
+
+      
           <CustomText
             text={"Enter the new address by filling the following information."}
             size={14}
@@ -392,6 +398,8 @@ const AddAddressScreen = ({ navigation, route }: any) => {
               setValues({ ...values, zipCode: value })
             }
           />
+         
+         
           <CustomCountryPicker
             placeholder="345 123 456 7"
             country={country}
@@ -431,8 +439,8 @@ const AddAddressScreen = ({ navigation, route }: any) => {
               style={{ marginTop: verticalScale(20) }}
             />
           </View>
-        </ScrollView>
       </ScreenLayout>
+      </KeyboardAwareScrollView>
 
       {laoding && <AbsoluateView />}
       <CustomToast

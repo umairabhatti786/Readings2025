@@ -94,11 +94,9 @@ const OrderDetailScreen = ({ route, navigation }: any) => {
     ApiServices.GetPotexOrder(params, async ({ isSuccess, response }: any) => {
       if (isSuccess) {
         let result = JSON.parse(response);
-        console.log("Postex", result?.dist?.transactionStatusHistory);
         const transformBookingDetails = (result: any) => {
           const updated = result?.dist?.transactionStatusHistory.map((item) => {
             const dateTime = moment(item.modifiedDatetime);
-            console.log("ckdnckdn", item.transactionStatusMessage);
             return {
               ...item,
               date: dateTime.format("DD MMM YYYY"), // e.g., 27 Jun 2025
@@ -678,15 +676,25 @@ const OrderDetailScreen = ({ route, navigation }: any) => {
                 //   subtotal
                 // }`}
                   text={`Rs. ${
-                    Number(item?.total_amount) - Number(item?.deliveryFee)
+                     item?.cardDiscountPercentage>0? Number(  item?.originalSubtotal):  Number(  item?.subTotal)
                   }`}
                   color={colors.black}
                   size={14}
                 />
               </View>
+              {
+                item?.giftWrapFee>0&&(
+                  <View style={{ ...appStyles.rowjustify }}>
+                  <CustomText text={"Gift Wrap"} color={colors.black} size={14} />
+                  <CustomText   text={`Rs.${Number(item?.giftWrapFee)}`} color={colors.black} size={14} />
+                </View>
+
+                )
+              }
+             
               <View style={{ ...appStyles.rowjustify }}>
                 <CustomText text={"Discounts"} color={colors.black} size={14} />
-                <CustomText text={"Rs.00"} color={colors.black} size={14} />
+                <CustomText text={`Rs.${Number( item?.cardDiscountPercentage>0? item?.originalSubtotal-item?.subTotal:"00")}`} color={colors.black} size={14} />
               </View>
               <View style={{ ...appStyles.rowjustify }}>
                 <CustomText

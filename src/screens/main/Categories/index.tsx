@@ -27,6 +27,7 @@ import {
 import { useIsFocused } from "@react-navigation/native";
 import { setIsBooksAdvanceSearch } from "../../../redux/reducers/advanceSearchReducer";
 import { STATUS_BAR_HEIGHT } from "../../../utils/CommonHooks";
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const CategoriesScreen = ({ navigation }: any) => {
   const [categories, setCategories] = useState(categoriesData);
@@ -117,14 +118,21 @@ const CategoriesScreen = ({ navigation }: any) => {
   };
   return (
     <>
-      <View
+      <SafeAreaView
         style={{
           gap: verticalScale(15),
           flex: 1,
        
         }}
       >
+        <View
+         style={{
+          flex: 1,
        
+        }}
+        >
+
+            
         <ScrollView
           style={{ ...appStyles.main }}
           ref={scrollRef}
@@ -132,7 +140,7 @@ const CategoriesScreen = ({ navigation }: any) => {
           contentContainerStyle={{
             gap: verticalScale(15),
             paddingBottom: verticalScale(isKeyboardVisible ? 300 : 80),
-            paddingTop: verticalScale(Platform.OS == "ios" ? 135 : 45),
+            paddingTop: verticalScale(95),
             paddingHorizontal: scale(20),
           }}
          
@@ -161,22 +169,55 @@ const CategoriesScreen = ({ navigation }: any) => {
             })}
           </View>
         </ScrollView>
-      </View>
 
-      <View
+        <View
+                style={{
+                  backgroundColor: "rgba(243, 245, 247, 0.9)", // Semi-transparent background,
+                  width: "100%",
+                  position: "absolute",
+                  top: 0,
+                  paddingHorizontal: scale(20),
+                  gap: verticalScale(7),
+                  paddingBottom: verticalScale(4),
+
+                }}
+                >
+                   <CustomHeader
+                 containerStyle={{
+                   height: Platform.OS=="ios"? verticalScale(35):50,
+                   paddingTop: verticalScale(Platform.OS=="ios"?  0:0),
+
+                 }}
+               />
+            
+          <CustomInput
+          value={search}
+          onChangeText={onSearch}
+          rightSource={search.length > 0 && images.close}
+          onShowPassword={() => {
+            setSearch("");
+            setCategories(categoriesData);
+            Keyboard.dismiss();
+          }}
+          placeholder="Search Category"
+        />
+                  </View>
+
+        {/* <View
           style={{
             backgroundColor: "rgba(243, 245, 247, 0.9)", // Semi-transparent background,
-            display: "flex",
-            // height: verticalScale(Platform.OS == "ios" ? 70 : 40),
             width: "100%",
             position: "absolute",
             top: 0,
             paddingHorizontal: scale(20),
-            paddingTop: verticalScale(Platform.OS=="ios"?  40:STATUS_BAR_HEIGHT),
+            paddingTop: verticalScale(Platform.OS=="ios"?  40:0),
             gap: verticalScale(7),
-            paddingBottom:verticalScale(4)
+            paddingBottom:verticalScale(4),
+            height: Platform.OS=="ios"? verticalScale(70):50,
+
           }}
         >
+           
           <CustomHeader />
 
           <CustomInput
@@ -190,7 +231,15 @@ const CategoriesScreen = ({ navigation }: any) => {
           }}
           placeholder="Search Category"
         />
+        </View> */}
+
         </View>
+     
+
+    
+      </SafeAreaView>
+
+   
       {/* <CustomHeader
         containerStyle={{
           backgroundColor: "rgba(243, 245, 247, 0.9)", // Semi-transparent background,

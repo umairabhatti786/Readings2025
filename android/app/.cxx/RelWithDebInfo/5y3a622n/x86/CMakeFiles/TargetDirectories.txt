@@ -16,18 +16,12 @@
 /Users/mac/Documents/Readings2025/android/app/.cxx/RelWithDebInfo/5y3a622n/x86/lottiereactnative_autolinked_build/CMakeFiles/react_codegen_lottiereactnative.dir
 /Users/mac/Documents/Readings2025/android/app/.cxx/RelWithDebInfo/5y3a622n/x86/lottiereactnative_autolinked_build/CMakeFiles/edit_cache.dir
 /Users/mac/Documents/Readings2025/android/app/.cxx/RelWithDebInfo/5y3a622n/x86/lottiereactnative_autolinked_build/CMakeFiles/rebuild_cache.dir
-/Users/mac/Documents/Readings2025/android/app/.cxx/RelWithDebInfo/5y3a622n/x86/Compressor_autolinked_build/CMakeFiles/react_codegen_Compressor.dir
-/Users/mac/Documents/Readings2025/android/app/.cxx/RelWithDebInfo/5y3a622n/x86/Compressor_autolinked_build/CMakeFiles/edit_cache.dir
-/Users/mac/Documents/Readings2025/android/app/.cxx/RelWithDebInfo/5y3a622n/x86/Compressor_autolinked_build/CMakeFiles/rebuild_cache.dir
 /Users/mac/Documents/Readings2025/android/app/.cxx/RelWithDebInfo/5y3a622n/x86/RNDatePickerSpecs_autolinked_build/CMakeFiles/react_codegen_RNDatePickerSpecs.dir
 /Users/mac/Documents/Readings2025/android/app/.cxx/RelWithDebInfo/5y3a622n/x86/RNDatePickerSpecs_autolinked_build/CMakeFiles/edit_cache.dir
 /Users/mac/Documents/Readings2025/android/app/.cxx/RelWithDebInfo/5y3a622n/x86/RNDatePickerSpecs_autolinked_build/CMakeFiles/rebuild_cache.dir
 /Users/mac/Documents/Readings2025/android/app/.cxx/RelWithDebInfo/5y3a622n/x86/rngesturehandler_codegen_autolinked_build/CMakeFiles/react_codegen_rngesturehandler_codegen.dir
 /Users/mac/Documents/Readings2025/android/app/.cxx/RelWithDebInfo/5y3a622n/x86/rngesturehandler_codegen_autolinked_build/CMakeFiles/edit_cache.dir
 /Users/mac/Documents/Readings2025/android/app/.cxx/RelWithDebInfo/5y3a622n/x86/rngesturehandler_codegen_autolinked_build/CMakeFiles/rebuild_cache.dir
-/Users/mac/Documents/Readings2025/android/app/.cxx/RelWithDebInfo/5y3a622n/x86/RNMapsSpecs_autolinked_build/CMakeFiles/react_codegen_RNMapsSpecs.dir
-/Users/mac/Documents/Readings2025/android/app/.cxx/RelWithDebInfo/5y3a622n/x86/RNMapsSpecs_autolinked_build/CMakeFiles/edit_cache.dir
-/Users/mac/Documents/Readings2025/android/app/.cxx/RelWithDebInfo/5y3a622n/x86/RNMapsSpecs_autolinked_build/CMakeFiles/rebuild_cache.dir
 /Users/mac/Documents/Readings2025/android/app/.cxx/RelWithDebInfo/5y3a622n/x86/RNPermissionsSpec_autolinked_build/CMakeFiles/react_codegen_RNPermissionsSpec.dir
 /Users/mac/Documents/Readings2025/android/app/.cxx/RelWithDebInfo/5y3a622n/x86/RNPermissionsSpec_autolinked_build/CMakeFiles/edit_cache.dir
 /Users/mac/Documents/Readings2025/android/app/.cxx/RelWithDebInfo/5y3a622n/x86/RNPermissionsSpec_autolinked_build/CMakeFiles/rebuild_cache.dir
@@ -46,6 +40,3 @@
 /Users/mac/Documents/Readings2025/android/app/.cxx/RelWithDebInfo/5y3a622n/x86/rnsvg_autolinked_build/CMakeFiles/react_codegen_rnsvg.dir
 /Users/mac/Documents/Readings2025/android/app/.cxx/RelWithDebInfo/5y3a622n/x86/rnsvg_autolinked_build/CMakeFiles/edit_cache.dir
 /Users/mac/Documents/Readings2025/android/app/.cxx/RelWithDebInfo/5y3a622n/x86/rnsvg_autolinked_build/CMakeFiles/rebuild_cache.dir
-/Users/mac/Documents/Readings2025/android/app/.cxx/RelWithDebInfo/5y3a622n/x86/RNCWebViewSpec_autolinked_build/CMakeFiles/react_codegen_RNCWebViewSpec.dir
-/Users/mac/Documents/Readings2025/android/app/.cxx/RelWithDebInfo/5y3a622n/x86/RNCWebViewSpec_autolinked_build/CMakeFiles/edit_cache.dir
-/Users/mac/Documents/Readings2025/android/app/.cxx/RelWithDebInfo/5y3a622n/x86/RNCWebViewSpec_autolinked_build/CMakeFiles/rebuild_cache.dir

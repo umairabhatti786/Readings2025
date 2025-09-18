@@ -28,6 +28,7 @@ import { LikedLayout } from "../../../utils/Loyout/LikedLayout";
 import { useIsFocused } from "@react-navigation/native";
 import { OrdersLayout } from "../../../utils/Loyout/OrdersLayout";
 import { STATUS_BAR_HEIGHT } from "../../../utils/CommonHooks";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const OrdersScreen = ({ navigation }: any) => {
   const [data, setData] = useState([]);
@@ -77,12 +78,12 @@ const OrdersScreen = ({ navigation }: any) => {
     ApiServices.GetOrder(params, async ({ isSuccess, response }: any) => {
       if (isSuccess) {
         let result = JSON.parse(response);
-        const processingOrders = result?.data?.orders.filter(
-          (order: any) => [1, 2, 3, 4].includes(order.status)
+        const processingOrders = result?.data?.orders.filter((order: any) =>
+          [1, 2, 3, 4].includes(order.status)
         );
-        
-        const orderHistory = result?.data?.orders.filter(
-          (order: any) => [5, 6].includes(order.status)
+
+        const orderHistory = result?.data?.orders.filter((order: any) =>
+          [5, 6].includes(order.status)
         );
 
         setProcessingOrders(processingOrders);
@@ -134,113 +135,133 @@ const OrdersScreen = ({ navigation }: any) => {
     );
   };
 
-  const renderOrdersItem = ({ item,index }: any) => {
-    console.log("Odfkdn",item)
+  const renderOrdersItem = ({ item, index }: any) => {
+    console.log("Odfkdn", item);
     return (
       <View>
-            <OrderCard
+        <OrderCard
           onPress={() => {
             navigation.navigate("OrderDetailScreen", { item: item });
           }}
           data={item}
         />
-       
       </View>
     );
   };
 
   return (
     <>
-      <View
+      <SafeAreaView
         style={{
-          gap: verticalScale(15),
+          gap: verticalScale(10),
           flex: 1,
           backgroundColor: colors.dull_white,
         }}
       >
         {loading ? (
           <View
-            style={{
-              paddingTop: verticalScale(Platform.OS == "ios" ? 40 : 0),
-            }}
+           
           >
             <OrdersLayout />
           </View>
         ) : (
           <>
             {/* <Tabs /> */}
-
-            <FlatList
-              data={activeTab == "Active" ? processingOrders : ordersHistory}
-              ref={scrollRef}
-              showsVerticalScrollIndicator={false}
-              scrollEnabled={processingOrders?.length > 0 ? true : false}
-              contentContainerStyle={{
-                gap: verticalScale(15),
-                paddingBottom: verticalScale(93),
-                paddingTop: verticalScale(Platform.OS == "ios" ? 135 : 95),
-                paddingHorizontal: scale(20),
-              }}
-              renderItem={renderOrdersItem}
-              keyExtractor={(item, index) => index.toString()}
-              ListEmptyComponent={
-                <View
-                  style={{
-                    height: windowWidth,
-                    alignItems: "center",
-                    justifyContent: "center",
-                    paddingTop:Platform.OS=="ios" ?"0%":"50%"
-                  }}
-                >
-                  <Image
+            <View style={{ flex: 1 }}>
+              <FlatList
+                data={activeTab == "Active" ? processingOrders : ordersHistory}
+                ref={scrollRef}
+                showsVerticalScrollIndicator={false}
+                scrollEnabled={processingOrders?.length > 0 ? true : false}
+                contentContainerStyle={{
+                  gap: verticalScale(15),
+                  paddingBottom: verticalScale(93),
+                  paddingTop: verticalScale(Platform.OS == "ios" ? 95 : 95),
+                  paddingHorizontal: scale(20),
+                }}
+                renderItem={renderOrdersItem}
+                keyExtractor={(item, index) => index.toString()}
+                ListEmptyComponent={
+                  <View
                     style={{
-                      width: windowWidth / 1.1,
-                      height: windowHeight / 2.2,
-                      marginTop: verticalScale(20),
+                      height: windowWidth,
+                      alignItems: "center",
+                      justifyContent: "center",
+                      paddingTop: Platform.OS == "ios" ? "0%" : "50%",
                     }}
-                    resizeMode="contain"
-                    source={images.empty_order}
-                  />
-                  <CustomText
-                    text={"You don’t have any active orders at this moment."}
-                    size={14}
-                    style={{ width: windowWidth / 1.5, textAlign: "center" }}
-                    fontWeight="500"
-                    color={colors.black}
-                  />
-                </View>
-              }
-            />
+                  >
+                    <Image
+                      style={{
+                        width: windowWidth / 1.1,
+                        height: windowHeight / 2.2,
+                        marginTop: verticalScale(20),
+                      }}
+                      resizeMode="contain"
+                      source={images.empty_order}
+                    />
+                    <CustomText
+                      text={"You don’t have any active orders at this moment."}
+                      size={14}
+                      style={{ width: windowWidth / 1.5, textAlign: "center" }}
+                      fontWeight="500"
+                      color={colors.black}
+                    />
+                  </View>
+                }
+              />
+
+              {!loading && (
+                <View
+                style={{
+                  backgroundColor: "rgba(243, 245, 247, 0.9)", // Semi-transparent background,
+                  width: "100%",
+                  position: "absolute",
+                  top: 0,
+                  paddingHorizontal: scale(20),
+                  gap: verticalScale(7),
+                  paddingBottom: verticalScale(4),
+                  
+
+                }}
+                >
+                   <CustomHeader
+                 containerStyle={{
+                   height: Platform.OS=="ios"? verticalScale(35):50,
+                   paddingTop: verticalScale(Platform.OS=="ios"?  0:0),
+                 }}
+               />
+               <Tabs />
+                  </View>
+                
+                // <View
+                
+                //   style={{
+                //     backgroundColor: "rgba(243, 245, 247, 0.9)", // Semi-transparent background,
+                //     height: Platform.OS == "ios" ? verticalScale(70) : 50,
+                //     width: "100%",
+                //     position: "absolute",
+                //     top: 0,
+                //     paddingHorizontal: scale(20),
+                //     paddingTop: verticalScale(Platform.OS == "ios" ? 40 : 0),
+                //     // gap: verticalScale(7),
+                //     // paddingBottom: verticalScale(4),
+                //   }}
+                // >
+                //   <CustomHeader />
+
+                //   <Tabs />
+                // </View>
+              )}
+            </View>
           </>
         )}
-      </View>
-      {!loading && (
-        <View
-          style={{
-            backgroundColor: "rgba(243, 245, 247, 0.9)", // Semi-transparent background,
-            display: "flex",
-            // height: verticalScale(Platform.OS == "ios" ? 70 : 40),
-            width: "100%",
-            position: "absolute",
-            top: 0,
-            paddingHorizontal: scale(20),
-            paddingTop: verticalScale(Platform.OS=="ios"?  40:STATUS_BAR_HEIGHT),
-            gap: verticalScale(7),
-            paddingBottom:verticalScale(4)
-          }}
-        >
-          <CustomHeader />
-
-          <Tabs/>
-        </View>
-      )}
+      </SafeAreaView>
 
       <CustomToast
         isVisable={isMessage}
         setIsVisable={setIsMessage}
         message={message}
       />
-      
     </>
   );
 };

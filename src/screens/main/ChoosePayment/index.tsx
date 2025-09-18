@@ -7,6 +7,7 @@ import {
   FlatList,
   Image,
   Alert,
+  Platform,
 } from "react-native";
 import ScreenLayout from "../../../components/ScreenLayout";
 import { scale, verticalScale } from "react-native-size-matters";
@@ -54,7 +55,7 @@ const ChoosePaymentScreen = ({ navigation, route }: any) => {
 
   console.log("paymentMethod", paymentMethod);
   const paymentMethods = [
-    { title: "Cash", type: "cash", id: 4, icon: images.cash },
+    { title: "Cash on Delivery", type: "cash", id: 4, icon: images.cash },
     {
       title: "Bank Transfer",
       type: "bank",
@@ -136,7 +137,7 @@ const ChoosePaymentScreen = ({ navigation, route }: any) => {
     );
     if (dispatchPayment == null) {
       setSelectedPaymentMethod({
-        title: "Cash",
+        title: "Cash on Delivery",
         type: "cash",
         id: 4,
         icon: images.cash,
@@ -162,10 +163,19 @@ const ChoosePaymentScreen = ({ navigation, route }: any) => {
         activeOpacity={0.5}
         onPress={() => {
           if (isNext) {
+            if(Platform.OS=="android"){
+              Alert.alert("Alert","This option will be available soon")
+              
+
+              return
+
+
+            }
             navigation.navigate("AddPaymentMethod", {
               isBillingAddress: isBillingAddress,
               isCheckout:isCheckout
             });
+          
           } else {
             setSelectedPaymentMethod(item);
             StorageServices.setItem(DISPATCH_PAYMENY_METHOD, item);

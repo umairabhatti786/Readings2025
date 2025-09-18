@@ -33,10 +33,13 @@ import LikedCard from "../Liked/LikedCard";
 import { LikedLayout } from "../../../utils/Loyout/LikedLayout";
 import { useIsFocused } from "@react-navigation/native";
 import { STATUS_BAR_HEIGHT } from "../../../utils/CommonHooks";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
 const CartScreen = ({ navigation }: any) => {
   const [data, setData] = useState<any>([]);
   const token = useSelector(getToken);
-  const isCartLoading=useSelector(getIsCartLoading)
+  const isCartLoading = useSelector(getIsCartLoading);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
   const [subtotal, setSubtotal] = useState(0);
@@ -45,18 +48,16 @@ const CartScreen = ({ navigation }: any) => {
   const scrollRef = useRef<any>();
   const isAdToCart = useSelector(getIsAddToCart);
   const dispatch = useDispatch();
+  const insets = useSafeAreaInsets();
 
   const [isMessage, setIsMessage] = useState(false);
   useEffect(() => {
-
     getCartBooks(); // Run this function on the first visit
-
   }, []);
   useEffect(() => {
     if (focused) {
       if (isAdToCart) {
         getCartBooks(); // Run this function on the first visit
-
       }
 
       // const unsubscribe = navigation.addListener("state", () => {
@@ -84,12 +85,11 @@ const CartScreen = ({ navigation }: any) => {
     ApiServices.GetOrderCart(params, async ({ isSuccess, response }: any) => {
       if (isSuccess) {
         let result = JSON.parse(response);
+        console.log("availableBookslength",result?.data?.preOrderBooks.length,result?.data?.availableBooks.length,result?.data?.outOfStockBooks.length,result?.data?.onDemandBooks.length)
         if (
           result?.data?.availableBooks ||
           result?.data?.outOfStockBooks ||
-          result?.data?.outOfStockBooks ||
           result?.data?.onDemandBooks ||
-
           result?.data?.preOrderBooks
         ) {
           setData([
@@ -97,16 +97,15 @@ const CartScreen = ({ navigation }: any) => {
             ...(result?.data?.outOfStockBooks || []), // Spread outOfStockBooks if exists, otherwise empty array
             ...(result?.data?.preOrderBooks || []), // Spread preOrderBooks if exists, otherwise empty array
             ...(result?.data?.onDemandBooks || []), // Spread onDemandBooks if exists, otherwise empty array
-
           ]);
           dispatch(setIsAddToCart(false));
-          dispatch(setIsAddCartLoading(false))
+          dispatch(setIsAddCartLoading(false));
           // setTimeout(() => {
           //   setLoading(true)
-            
+
           // }, 500);
         } else {
-          dispatch(setIsAddCartLoading(false))
+          dispatch(setIsAddCartLoading(false));
 
           if (token) {
             setMessage(result?.error);
@@ -114,7 +113,7 @@ const CartScreen = ({ navigation }: any) => {
           }
         }
       } else {
-        dispatch(setIsAddCartLoading(false))
+        dispatch(setIsAddCartLoading(false));
 
         setMessage("Something went wrong");
         setIsMessage(true);
@@ -123,7 +122,6 @@ const CartScreen = ({ navigation }: any) => {
   };
 
   const renderOrdersItem = ({ item }: any) => {
-    console.log("ckdkcdncd",item)
     return (
       <LikedCard
         isCart={true}
@@ -144,7 +142,7 @@ const CartScreen = ({ navigation }: any) => {
   };
   return (
     <>
-      <View
+      <SafeAreaView
         style={{
           gap: verticalScale(15),
           flex: 1,
@@ -153,25 +151,22 @@ const CartScreen = ({ navigation }: any) => {
       >
         {isCartLoading ? (
           <View
-            style={{
-              paddingTop: verticalScale(Platform.OS=="ios"? 35:0),
-            }}
+          
           >
             <LikedLayout />
           </View>
         ) : (
-        
+          <View style={{ flex: 1 }}>
             <FlatList
               data={data}
               ref={scrollRef}
               scrollEnabled={data?.length > 0 ? true : false}
               contentContainerStyle={{
-              gap: verticalScale(15),
-              paddingBottom: verticalScale(187),
-              paddingHorizontal: scale(20),
-              paddingTop: verticalScale(Platform.OS=="ios"? 80:45),
-
-            }}
+                gap: verticalScale(15),
+                paddingBottom: verticalScale( Platform.OS=="ios"?370: 340),
+                paddingHorizontal: scale(20),
+                paddingTop: verticalScale(Platform.OS == "ios" ? 45 : 45),
+              }}
               renderItem={renderOrdersItem}
               ListEmptyComponent={
                 <View
@@ -201,66 +196,67 @@ const CartScreen = ({ navigation }: any) => {
               showsVerticalScrollIndicator={false}
               keyExtractor={(item, index) => index.toString()}
             />
-        )}
-        {
-          !isCartLoading&&(
-            <>
-              {data?.length > 0 && (
-          <View
-            style={{
-              gap: verticalScale(10),
-              paddingHorizontal: scale(20),
+
+{!isCartLoading && (
+          <CustomHeader
+            containerStyle={{
               backgroundColor: "rgba(243, 245, 247, 0.9)", // Semi-transparent background,
-              display: "flex",
-              paddingVertical: verticalScale(10),
+              height: Platform.OS == "ios" ? verticalScale(35) : 50,
               width: "100%",
               position: "absolute",
-              bottom: verticalScale(75),
+              top: 0,
+              paddingHorizontal: scale(20),
+              paddingTop: verticalScale(Platform.OS == "ios" ? 0 : 0),
             }}
-          >
-            <View
-              style={{
-                ...appStyles.rowjustify,
-                ...styles.detailContainer,
-              }}
-            >
-              <CustomText text={"Subtotal"} size={12} color={colors.grey} />
+          />
+        )}
 
-              <CustomText
-                text={`Rs. ${subtotal}`}
-                size={14}
-                fontWeight={"600"}
-                fontFam={font.WorkSans_SemiBold}
-                color={colors.black}
-              />
-            </View>
-            <CustomButton
-              text="Checkout"
-              onPress={() => navigation.navigate("CheckoutScreen")}
-            />
           </View>
         )}
-            </>
+        {!isCartLoading && (
+          <>
+            {data?.length > 0 && (
+              <View
+                style={{
+                  gap: verticalScale(10),
+                  paddingHorizontal: scale(20),
+                  backgroundColor: "rgba(243, 245, 247, 0.9)", // Semi-transparent background,
+                  display: "flex",
+                  paddingVertical: verticalScale(10),
+                  width: "100%",
+                  position: "absolute",
+                  // bottom: verticalScale(Platform.OS=="ios"?75: 55),
+                  bottom: Platform.OS=="ios"?verticalScale(75) : insets.bottom+70
 
-          )
-        }
+                }}
+              >
+                <View
+                  style={{
+                    ...appStyles.rowjustify,
+                    ...styles.detailContainer,
+                  }}
+                >
+                  <CustomText text={"Subtotal"} size={12} color={colors.grey} />
 
-      
-      </View>
-      {!isCartLoading && (
-        <CustomHeader
-        containerStyle={{
-          backgroundColor: "rgba(243, 245, 247, 0.9)", // Semi-transparent background,
-          display: "flex",
-          height: verticalScale(Platform.OS=="ios"? 70:40),
-          width: "100%",
-          position: "absolute",
-          top: 0,
-          paddingHorizontal: scale(20),
-          paddingTop: verticalScale(Platform.OS=="ios"?  40:STATUS_BAR_HEIGHT),
-        }}
-        />
-      )}
+                  <CustomText
+                    text={`Rs. ${subtotal}`}
+                    size={14}
+                    fontWeight={"600"}
+                    fontFam={font.WorkSans_SemiBold}
+                    color={colors.black}
+                  />
+                </View>
+                <CustomButton
+                  text="Checkout"
+                  onPress={() => navigation.navigate("CheckoutScreen")}
+                />
+              </View>
+            )}
+          </>
+        )}
+
+       
+      </SafeAreaView>
     </>
   );
 };

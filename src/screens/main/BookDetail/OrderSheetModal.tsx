@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, TouchableOpacity, Image, Alert } from "react-native";
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  Alert,
+  Text,
+} from "react-native";
 import { appStyles } from "../../../utils/AppStyles";
 import { scale, verticalScale } from "react-native-size-matters";
 import { colors } from "../../../utils/colors";
@@ -66,6 +73,7 @@ const OrderSheetModal: React.FC<Props> = ({
   const guestToken = useSelector(getGuestToken);
   const [userBilliingAddress, setUserBillingAddress] = useState<any>();
   const [loading, setLoading] = useState(false);
+  const [cardDiscount, setCardDiscount] = useState<any>({});
 
   const [message, setMessage] = useState("");
   const [isMessage, setIsMessage] = useState(false);
@@ -75,7 +83,7 @@ const OrderSheetModal: React.FC<Props> = ({
   const [buyNowEmail, setBuyNowEmail] = useState("");
   console.log("buyNowEmail", buyNowEmail);
   const shippingAmount = 150;
-
+  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     getUserAddresses();
     getActivePaymentMethod();
@@ -92,7 +100,66 @@ const OrderSheetModal: React.FC<Props> = ({
         ? dispatchPayment
         : { title: "Cash on Delivery", label: "cash", id: 4, icon: images.cash }
     );
+
+    if (dispatchPayment?.payment_method == "card") {
+      getPaymentCardDiscount(dispatchPayment);
+    } else {
+      setCardDiscount({});
+    }
   };
+
+  const getPaymentCardDiscount = (method: any) => {
+    let params = {
+      token: token != null ? token : guestToken,
+      bin: method?.bin,
+      last4digits: method?.card_details?.last_four_digits,
+    };
+    console.log("ckdnkdnkdncknc");
+    // setHasMoreData(true);
+    ApiServices.GetCardDicount(params, async ({ isSuccess, response }: any) => {
+      if (isSuccess) {
+        let result = JSON.parse(response);
+
+        if (result?.success) {
+          setCardDiscount(result?.data);
+        } else {
+          setCardDiscount({});
+        }
+        // console.log("resultresultresultresult",result?.data)
+      } else {
+        setLoading(false);
+        setMessage("Something went wrong");
+        setIsMessage(true);
+      }
+    });
+  };
+
+  const CalculateCardDiscount = () => {
+    if (cardDiscount?.binDiscountDetail?.discount_value > 0) {
+      let discount = Math.floor(
+        (calculateTotal() * cardDiscount?.binDiscountDetail?.discount_value) /
+          100
+      );
+      console.log("discount", cardDiscount);
+      return discount > Number(cardDiscount?.binDiscountDetail?.discount_limit)
+        ? Number(cardDiscount?.binDiscountDetail?.discount_limit)
+        : discount;
+    }
+    return 0;
+  };
+
+  // const CalculateCardDiscount = () => {
+  //   if (cardDiscount?.binDiscountDetail?.discount_value > 0) {
+  //     let discount = Math.floor(
+  //       (checkOutdetails?.subtital *
+  //         cardDiscount?.binDiscountDetail?.discount_value) /
+  //         100
+  //     );
+  //     console.log("discount",cardDiscount)
+  //     return discount > 50 ? Number(cardDiscount?.binDiscountDetail?.discount_limit) : discount;
+  //   }
+  //   return 0;
+  // };
 
   // const getpaymentMethod = async () => {
   //   const dispatchPayment = await StorageServices.getItem(
@@ -170,7 +237,7 @@ const OrderSheetModal: React.FC<Props> = ({
       return;
     }
 
-    setIsBuyNowLoading(true);
+    setIsLoading(true);
     navigation.setOptions({
       gestureEnabled: false, // Disable swipe back when true
     });
@@ -180,7 +247,6 @@ const OrderSheetModal: React.FC<Props> = ({
         if (isSuccess) {
           let result = JSON.parse(response);
           if (result?.success) {
-
             if (!guestUserToken) {
               StorageServices.setItem(GUESTTOKEN, result?.data.token);
               dispatch(setGuestToken(result?.data.token));
@@ -202,27 +268,34 @@ const OrderSheetModal: React.FC<Props> = ({
       Book_Id: book_id,
       quantity: quantity,
       payment_option:
-      activePaymentMethod?.payment_method == "card" ? 1 : activePaymentMethod?.id,
+        activePaymentMethod?.payment_method == "card"
+          ? 1
+          : activePaymentMethod?.id,
       email: token != null ? user?.email : buyNowEmail,
       customer: {
         email: token != null ? user?.email : buyNowEmail,
-        name:token != null ? user?.first_name + " " + user?.last_name:userBilliingAddress?.id?userBilliingAddress?.Name:userlatestAddress?.Name,
+        name:
+          token != null
+            ? user?.first_name + " " + user?.last_name
+            : userBilliingAddress?.id
+            ? userBilliingAddress?.Name
+            : userlatestAddress?.Name,
         phone: userBilliingAddress?.id
           ? userBilliingAddress?.Phone
           : userlatestAddress?.Phone,
       },
 
       billingAddress: {
-        address:  userBilliingAddress?.id
+        address: userBilliingAddress?.id
           ? userBilliingAddress?.Address
           : userlatestAddress?.Address,
-        city:  userBilliingAddress?.id
+        city: userBilliingAddress?.id
           ? userBilliingAddress?.City
           : userlatestAddress?.City,
         province: userBilliingAddress?.id
           ? userBilliingAddress?.Province
           : userlatestAddress?.Province,
-        country:userBilliingAddress?.id
+        country: userBilliingAddress?.id
           ? userBilliingAddress?.Country
           : userlatestAddress?.Country,
         zipCode: userBilliingAddress?.id
@@ -256,32 +329,32 @@ const OrderSheetModal: React.FC<Props> = ({
             async ({ isSuccess, response }: any) => {
               if (isSuccess) {
                 let result = JSON.parse(response);
-                console.log("Pleaseoeer",result)
+                console.log("Pleaseoeer", result);
 
                 if (result?.success) {
                   navigation.setOptions({
                     gestureEnabled: true, // Disable swipe back when true
                   });
-                  setIsBuyNowLoading(false);
+                  setIsLoading(false);
                   setIsSuccessModal(true);
                 } else {
                   Alert.alert("", result?.error);
-                  setIsBuyNowLoading(false);
+                  setIsLoading(false);
                 }
               } else {
                 // setMessage("Something went wrong");
                 Alert.alert("Alert!", "Something went wrong");
-                setIsBuyNowLoading(false);
+                setIsLoading(false);
               }
             }
           );
         } else {
           Alert.alert("", result?.error);
-          setIsBuyNowLoading(false);
+          setIsLoading(false);
         }
       } else {
         Alert.alert("", "Something went wrong");
-        setIsBuyNowLoading(false);
+        setIsLoading(false);
       }
     });
   };
@@ -316,6 +389,10 @@ const OrderSheetModal: React.FC<Props> = ({
           )
         : Number(data?.PAK_PRICE || 0);
 
+    if (cardDiscount?.binDiscountDetail?.discount_value > 0) {
+      return Number(data?.PAK_PRICE * quantity);
+    }
+
     return quantity * newSubtotal;
   };
 
@@ -329,6 +406,7 @@ const OrderSheetModal: React.FC<Props> = ({
     children,
     disabled,
     last_four_digits,
+    color,
   }: any) => {
     return (
       <TouchableOpacity
@@ -340,48 +418,71 @@ const OrderSheetModal: React.FC<Props> = ({
           ...styles.detailContainer,
         }}
       >
-        <CustomText text={title} size={12} color={colors.grey} />
+        <CustomText text={title} size={12} color={color || colors.grey} />
         <View>
+          {des.length > 0 && (
+            <View
+              style={{
+                ...appStyles.row,
+                gap: scale(7),
+                justifyContent: "flex-end",
+              }}
+            >
+              <CustomText
+                text={des}
+                style={{ textAlign: "right" }}
+                size={size || 12}
+                fontWeight={fontWeight}
+                fontFam={fontFam || font.WorkSans_Regular}
+                color={color || colors.black}
+              />
+              {children}
+            </View>
+          )}
 
-  <View style={{ ...appStyles.row, gap: scale(7) }}>
-          <CustomText
-            text={des}
-            size={size || 12}
-            fontWeight={fontWeight}
-            fontFam={fontFam || font.WorkSans_Regular}
-            color={colors.black}
-          />
-          {children}
-          
-        </View>
-
-         {last_four_digits && (
-              <View
-                style={{
-                  flexDirection: "row",
-                  gap: scale(5),
-                }}
-              >
-                <CustomText
-                  text={`....`}
-                  size={17}
-                  color={colors.grey100}
-                  // style={{paddingBottom:20 }}
-                  fontWeight="500"
-                  fontFam={font.WorkSans_Regular}
-                />
+          {last_four_digits && (
+            <View
+              style={{
+                flexDirection: "row",
+                gap: scale(5),
+                alignItems: "center",
+              }}
+            >
+              <CustomText
+                text={`....`}
+                size={17}
+                color={colors.grey100}
+                // style={{paddingBottom:20 }}
+                fontWeight="500"
+                fontFam={font.WorkSans_Regular}
+              />
+              <View style={{ ...appStyles.row, gap: scale(5) }}>
                 <CustomText
                   label={`${last_four_digits}`}
                   size={14}
                   style={{ paddingTop: verticalScale(4) }}
-                  color={colors.grey100}
+                  color={color || colors.grey100}
                   fontWeight="500"
                   fontFam={font.WorkSans_Regular}
                 />
+                <Image
+                  source={
+                    activePaymentMethod?.card_details?.card_network ==
+                    "mastercard"
+                      ? images?.master_card
+                      : images?.visa_card
+                  }
+                  resizeMode="contain"
+                  style={{
+                    width: scale(20),
+                    height: scale(20),
+                    marginTop: verticalScale(3),
+                  }}
+                />
               </View>
-            )}
+            </View>
+          )}
         </View>
-      
       </TouchableOpacity>
     );
   };
@@ -424,6 +525,19 @@ const OrderSheetModal: React.FC<Props> = ({
           setQuantity={setQuantity}
           quantity={quantity}
           data={data}
+          our_price={
+            cardDiscount?.binDiscountDetail?.discount_value > 0
+              ? `Rs ${data?.PAK_PRICE}`
+              : `Rs ${
+                  Number(data?.Discount) > 0
+                    ? Math.floor(
+                        Number(data?.PAK_PRICE) -
+                          Number(data?.PAK_PRICE) *
+                            (Number(data?.Discount) / 100)
+                      )
+                    : data?.PAK_PRICE
+                }`
+          }
         />
 
         {loading ? (
@@ -501,6 +615,10 @@ const OrderSheetModal: React.FC<Props> = ({
               </View>
             )} */}
 
+            {/* item?.card_details?.card_network == "mastercard"
+                        ? images?.master_card
+                        : images?.visa_card */}
+
             <DetailCard
               onPress={onPaywith}
               last_four_digits={
@@ -509,27 +627,46 @@ const OrderSheetModal: React.FC<Props> = ({
               disabled={isBuyNowLoading}
               title={"Pay With"}
               // des={activePaymentMethod?.title}
-              des={
-                activePaymentMethod?.card_details?.card_network ||
-                activePaymentMethod?.title
-              }
-          >
+              des={activePaymentMethod?.title ? activePaymentMethod?.title : ""}
+            ></DetailCard>
+          </View>
+        )}
 
-           
-            </DetailCard>
+        {cardDiscount?.binDiscountDetail?.discount_value > 0 && (
+          <View style={{ ...appStyles.rowjustify, width: "100%" }}>
+            <DetailCard
+              onPress={onPaywith}
+              disabled={isBuyNowLoading}
+              color={colors.green}
+              title={`${cardDiscount?.binDiscountDetail?.bank_name} Discount (${cardDiscount?.binDiscountDetail?.discount_value}%)`}
+              // des={activePaymentMethod?.title}
+              des={`- Rs. ${CalculateCardDiscount()}`}
+            ></DetailCard>
+            {/* <CustomText
+                        text={`${cardDiscount?.binDiscountDetail?.bank_name} Discount`}
+                        color={colors.green}
+                        size={14}
+                      />
+                      <CustomText
+                        text={`- Rs. ${CalculateCardDiscount()}`}
+                        color={colors.green}
+                        size={14}
+                      /> */}
           </View>
         )}
         <DetailCard
           title={"Total"}
           disabled={true}
-          des={`PKR ${calculateTotal() + Number(shippingAmount)}*`}
+          des={`PKR ${
+            calculateTotal() - CalculateCardDiscount() + Number(shippingAmount)
+          }*`}
           fontFam={font.WorkSans_SemiBold}
           fontWeight={"600"}
           size={14}
         />
       </View>
       <CustomButton
-        isLoading={isBuyNowLoading}
+        isLoading={isLoading}
         text="Place order"
         onPress={onPlaceOrder}
       />

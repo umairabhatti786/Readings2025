@@ -14,7 +14,7 @@ export const HomeLayout = ({}) => {
         highlightColor="rgb(222, 226, 230)"
         backgroundColor="#e9ecef" // Set the main background color of the skeleton
       >
-        <View style={{ paddingTop:Platform.OS=="ios"?  verticalScale(45):verticalScale(13), gap: verticalScale(15) }}>
+        <View style={{ paddingTop:Platform.OS=="ios"?  verticalScale(10):verticalScale(13), gap: verticalScale(15) }}>
           <View
             style={{ ...appStyles.rowjustify, paddingHorizontal: scale(20) }}
           >

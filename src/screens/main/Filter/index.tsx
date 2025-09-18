@@ -48,6 +48,23 @@ const FilterScreen = ({ navigation }: any) => {
   });
 
   return (
+
+    <KeyboardAwareScrollView
+    showsVerticalScrollIndicator={false}
+    enableAutomaticScroll
+    keyboardShouldPersistTaps="handled"
+    style={{
+      flex: 1,
+      backgroundColor: colors.dull_white,
+    }}
+    contentContainerStyle={{
+      backgroundColor: colors.dull_white,
+      gap: verticalScale(20),
+      paddingBottom: verticalScale(40),
+    }}
+    enableOnAndroid={true}
+    extraScrollHeight={verticalScale(100)} // give some space above keyboard
+  >
     <ScreenLayout>
       <View
         style={{
@@ -58,15 +75,7 @@ const FilterScreen = ({ navigation }: any) => {
         <TopHeader title="Advanced Search" />
       </View>
 
-      <KeyboardAwareScrollView
-        showsVerticalScrollIndicator={false}
-        style={{ backgroundColor: colors.dull_white, flex: 1 }}
-        contentContainerStyle={{
-          backgroundColor: colors.dull_white,
-          gap: verticalScale(20),
-          flex: 1,
-        }}
-      >
+    
         <View
           style={{
             paddingHorizontal: scale(20),
@@ -105,13 +114,13 @@ const FilterScreen = ({ navigation }: any) => {
             }}
           />
 
-<CustomInput
-              placeholder="Category"
-              value={values.category}
-              onChangeText={(txt: any) => {
-                setValues({ ...values, category: txt });
-              }}
-            />
+          <CustomInput
+            placeholder="Category"
+            value={values.category}
+            onChangeText={(txt: any) => {
+              setValues({ ...values, category: txt });
+            }}
+          />
           {/* <DropDown
             placeholder={"Category"}
             label="Download"
@@ -132,7 +141,7 @@ const FilterScreen = ({ navigation }: any) => {
               };
             })}
           /> */}
-            <DropDown
+          <DropDown
             placeholder={"Price Range"}
             label="Download"
             maxHeight={150}
@@ -150,8 +159,6 @@ const FilterScreen = ({ navigation }: any) => {
               };
             })}
           />
-
-        
 
           <View style={appStyles.rowjustify}>
             <DropDown
@@ -216,7 +223,6 @@ const FilterScreen = ({ navigation }: any) => {
               }}
             />
           </View>
-        
         </View>
         <View style={styles.continueBtnContainer}>
           <CustomButton
@@ -226,13 +232,14 @@ const FilterScreen = ({ navigation }: any) => {
               dispatch(setIsHighDiscount(false));
               dispatch(setIsBooksAdvanceSearch(true));
               dispatch(setBooksAdvanceSearch(values));
-              navigation.navigate("SearchResultScreen",{isFilter:true});
+              navigation.navigate("SearchResultScreen", { isFilter: true });
             }}
             text="Search"
           />
         </View>
-      </KeyboardAwareScrollView>
     </ScreenLayout>
+    </KeyboardAwareScrollView>
+
   );
 };
 
@@ -240,7 +247,7 @@ export default FilterScreen;
 
 const styles = StyleSheet.create({
   continueBtnContainer: {
-    paddingBottom: verticalScale(30),
+    paddingTop: verticalScale(30),
     paddingHorizontal: scale(20),
   },
 });

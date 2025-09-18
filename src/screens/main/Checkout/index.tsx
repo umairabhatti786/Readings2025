@@ -79,12 +79,14 @@ const CheckoutScreen = ({ navigation, route }: any) => {
   const guestToken = useSelector(getGuestToken);
   const authData = useSelector(getAuthData);
   const [orderId, setOrderId] = useState();
+  const [subTotal,setSubTotal]=useState()
+  const [isOnDemandDelivery,setIsOnDemandDelivery]=useState(false)
   const [checkOutdetails, setCheckOutdetails] = useState({
     subtital: 0,
     shipping: 0,
     total: 0,
   });
-  console.log("authDatacardDiscount", cardDiscount);
+  console.log("checkOutdetails", checkoutBooks);
 
   const [selectedOnlinePayment, setSelectedOnlinePayment] = useState("");
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("");
@@ -122,6 +124,75 @@ const CheckoutScreen = ({ navigation, route }: any) => {
     return unsubscribe; // Clean up the listener when the screen is unmounted
   }, []);
 
+  // useEffect(() => {
+  //     UpdateOndemandDelivery(); // Run this function on the first visit
+   
+ 
+
+  // }, [checkoutBooks]);
+
+  const UpdateOndemandDelivery=(    availableBooks: any[],
+    preOrderBooks: any[],
+    outOfStockBooks: any[],
+    onDemandBooks: any[])=>{
+
+
+
+      const hasAvailable = availableBooks.length > 0;
+      const hasPreOrder = preOrderBooks.length > 0;
+      const hasOutOfStock = outOfStockBooks.length > 0;
+      const hasOnDemand = onDemandBooks.length > 0;
+  
+      // ✅ Two-category combinations with amount = 300
+      if (
+        (hasAvailable && hasOutOfStock) ||
+        (hasAvailable && hasOnDemand) ||
+        (hasPreOrder && hasOutOfStock) ||
+        (hasPreOrder && hasOnDemand)
+      ) {
+        return true;
+      }
+  
+      // ✅ Any three-category combination = 300
+      const totalTrue = [
+        hasAvailable,
+        hasPreOrder,
+        hasOutOfStock,
+        hasOnDemand,
+      ].filter(Boolean).length;
+      if (totalTrue >= 3) {
+        return true;
+      }
+  
+      // ✅ All four categories = 300
+      if (hasAvailable && hasPreOrder && hasOutOfStock && hasOnDemand) {
+        return true;
+      }
+  
+      // Otherwise not 300
+      return false;
+    
+
+   
+
+    // const hasLimitedAvailability = checkoutBooks.some(book => {
+    //   console.log("status",book)
+    //   const status = book.BOOK_STATUS;
+    //   const quantity = Number(book.QUANTITY) || 0;
+    
+    //   const isStatusLimited =
+    //     status === "N" ||
+    //     status === "O" 
+    
+    //   return isStatusLimited && quantity <= 0;
+    // });
+    // setIsOnDemandDelivery(hasLimitedAvailability);
+
+
+  }
+
+
+
   console.log("userlatestAddress", selectedPaymentMethod);
 
   const getCheckoutData = () => {
@@ -133,6 +204,7 @@ const CheckoutScreen = ({ navigation, route }: any) => {
     ApiServices.GetOrderCart(params, async ({ isSuccess, response }: any) => {
       if (isSuccess) {
         let result = JSON.parse(response);
+        console.log("CardChechc",result)
         setCheckOutdetails({
           ...checkOutdetails,
           subtital: result?.data?.summary?.net_amount,
@@ -170,6 +242,9 @@ const CheckoutScreen = ({ navigation, route }: any) => {
             ...(result?.data?.preOrderBooks || []), // Spread preOrderBooks if exists, otherwise empty array
             ...(result?.data?.onDemandBooks || []), // Spread onDemandBooks if exists, otherwise empty array
           ]);
+
+          let isOnDemand=UpdateOndemandDelivery(result?.data?.availableBooks,result?.data?.preOrderBooks,result?.data?.outOfStockBooks,result?.data?.onDemandBooks)
+          setIsOnDemandDelivery(isOnDemand)
         } else {
           setLoading(false);
           if (token) {
@@ -196,7 +271,8 @@ const CheckoutScreen = ({ navigation, route }: any) => {
     ApiServices.GetCardDicount(params, async ({ isSuccess, response }: any) => {
       if (isSuccess) {
         let result = JSON.parse(response);
-
+        console.log("ckdbkdc",result?.data)
+        setSubTotal
         if (result?.success) {
           setCardDiscount(result?.data);
         } else {
@@ -240,7 +316,6 @@ const CheckoutScreen = ({ navigation, route }: any) => {
       async ({ isSuccess, response }: any) => {
         if (isSuccess) {
           let result = JSON.parse(response);
-          console.log("ckdnckd", result);
           if (result?.data) {
             let data = result?.data?.addresses;
             const lastObject = data[data.length - 1];
@@ -436,14 +511,36 @@ const CheckoutScreen = ({ navigation, route }: any) => {
 
   const CalculateCardDiscount = () => {
     if (cardDiscount?.binDiscountDetail?.discount_value > 0) {
-      return Math.floor(
-        (checkOutdetails?.subtital *
+      let discount = Math.floor(
+        (CalculateSubTotal() *
           cardDiscount?.binDiscountDetail?.discount_value) /
           100
       );
+      console.log("discount",cardDiscount)
+      return discount > Number(cardDiscount?.binDiscountDetail?.discount_limit) ? Number(cardDiscount?.binDiscountDetail?.discount_limit) : discount;
     }
     return 0;
   };
+
+  const CalculateSubTotal = () => {
+    if (cardDiscount?.binDiscountDetail?.discount_value > 0) {
+
+      let currentTotal = checkoutBooks?.reduce(
+        (accumulator: any, current: any) =>
+          accumulator + Number(current?.PAK_PRICE*current?.cart_qty),
+        0.0,
+      );
+
+      console.log("currentTotal",currentTotal)
+
+    return currentTotal;
+  };
+
+  return  checkOutdetails?.subtital
+
+}
+
+// CalculateSubTotal()
 
   const PayWithCard = () => {
     let data = {
@@ -451,7 +548,7 @@ const CheckoutScreen = ({ navigation, route }: any) => {
       paymentMethod: selectedMethod?.payment_method,
       customer: {
         email: token == null ? values?.email : authData?.email,
-        name: authData?.first_name + " " + authData?.last_name,
+        name: `${authData?.first_name} ${authData?.last_name}`,
         phone: isBilling
           ? userlatestAddress?.Phone
           : userBilliingAddress?.id
@@ -490,7 +587,6 @@ const CheckoutScreen = ({ navigation, route }: any) => {
     };
 
     var raw = JSON.stringify(data);
-    console.log("ckdnckdnc", data);
 
     let params = {
       data: raw,
@@ -500,7 +596,7 @@ const CheckoutScreen = ({ navigation, route }: any) => {
     console.log("paramsData", params);
 
     ApiServices.PayWithCard(params, async ({ isSuccess, response }: any) => {
-      console.log("placeOrder", response);
+      console.log("payCardResponse", response);
       if (isSuccess) {
         let result = JSON.parse(response);
         console.log("PlaceOdercad", result);
@@ -537,7 +633,7 @@ const CheckoutScreen = ({ navigation, route }: any) => {
             params,
             async ({ isSuccess, response }: any) => {
               if (isSuccess) {
-                let result = JSON.parse(response);
+                let result = JSON.parse(response)
                 console.log("PlaceOder", result);
                 if (result?.success) {
                   const match = result?.data.redirectUrl.match(/orderId=(\d+)/);
@@ -704,8 +800,8 @@ const CheckoutScreen = ({ navigation, route }: any) => {
                 source={images.visa}
                 resizeMode="contain"
                 style={{
-                  width: scale(30),
-                  height: scale(30),
+                  width: scale(34),
+                  height: scale(34),
                 }}
               />
             )}
@@ -739,9 +835,7 @@ const CheckoutScreen = ({ navigation, route }: any) => {
 
         <CustomText
           text={`Rs. ${
-            isGiftRap
-              ? Number(checkOutdetails?.total + 100) - CalculateCardDiscount()
-              : checkOutdetails?.total - CalculateCardDiscount()
+            GrandCalculation()
           }`}
           size={15}
           color={colors.dark_black}
@@ -750,6 +844,35 @@ const CheckoutScreen = ({ navigation, route }: any) => {
         />
       </TouchableOpacity>
     );
+  };
+
+  const GrandCalculation = (
+   
+  ) => {
+
+    // isGiftRap
+    // ? (Number(checkOutdetails?.total + 100) - CalculateCardDiscount()) +
+    //   (isOnDemandDelivery ? 150 : 0)
+    // : (checkOutdetails?.total - CalculateCardDiscount()) +
+    //   (isOnDemandDelivery ? 150 : 0)
+    // let finalTotal = Number(CalculateSubTotal()+checkOutdetails?.shipping) || 0;
+
+    let finalTotal =  cardDiscount?.binDiscountDetail?.discount_value > 0?Number(CalculateSubTotal()+checkOutdetails?.shipping) || 0:  Number(checkOutdetails?.total) || 0;
+  
+    // Apply discount
+    finalTotal -= CalculateCardDiscount();
+  
+    // Add gift wrap charge
+    if (isGiftRap) {
+      finalTotal += 100;
+    }
+  
+    // Add on-demand delivery charge
+    if (isOnDemandDelivery) {
+      finalTotal += 150;
+    }
+  
+    return finalTotal;
   };
 
   return (
@@ -1027,7 +1150,7 @@ const CheckoutScreen = ({ navigation, route }: any) => {
                     icon={
                       selectedMethod?.card_details?.card_network == "mastercard"
                         ? images?.master_card
-                        : selectedMethod?.card_details?.card_network == "vize"
+                        : selectedMethod?.card_details?.card_network == "visa"
                         ? images.visa
                         : selectedMethod?.icon
                     }
@@ -1320,7 +1443,7 @@ const CheckoutScreen = ({ navigation, route }: any) => {
                       size={14}
                     />
                     <CustomText
-                      text={`Rs. ${checkOutdetails?.subtital}`}
+                      text={`Rs. ${CalculateSubTotal()}`}
                       color={colors.black}
                       size={14}
                     />
@@ -1329,8 +1452,10 @@ const CheckoutScreen = ({ navigation, route }: any) => {
                   {cardDiscount?.binDiscountDetail?.discount_value > 0 && (
                     <View style={{ ...appStyles.rowjustify, width: "100%" }}>
                       <CustomText
-                        text={`${cardDiscount?.binDiscountDetail?.bank_name} Discount`}
+                        text={`${cardDiscount?.binDiscountDetail?.bank_name} Discount (${cardDiscount?.binDiscountDetail?.discount_value}%)`}
                         color={colors.green}
+                        style={{width:"75%"}}
+                        numberOfLines={1}
                         size={14}
                       />
                       <CustomText
@@ -1354,6 +1479,7 @@ const CheckoutScreen = ({ navigation, route }: any) => {
                       />
                     </View>
                   )}
+                 
 
                   <View style={{ ...appStyles.rowjustify, width: "100%" }}>
                     <CustomText
@@ -1367,6 +1493,25 @@ const CheckoutScreen = ({ navigation, route }: any) => {
                       size={14}
                     />
                   </View>
+
+                  {
+                    isOnDemandDelivery&&(
+
+                      <View style={{ ...appStyles.rowjustify, width: "100%" }}>
+                      <CustomText
+                        text={"On Demand Delivery"}
+                        color={colors.black}
+                        size={14}
+                      />
+                      <CustomText
+                        text={`Rs. ${150}`}
+                        color={colors.black}
+                        size={14}
+                      />
+                    </View>
+
+                    )
+                  }
                 </View>
               </View>
             </KeyboardAwareScrollView>
@@ -1384,12 +1529,9 @@ const CheckoutScreen = ({ navigation, route }: any) => {
               fontFam={font.WorkSans_SemiBold}
             />
             <CustomText
-              text={`Rs. ${
-                isGiftRap
-                  ? Number(checkOutdetails?.total + 100) -
-                    CalculateCardDiscount()
-                  : checkOutdetails?.total - CalculateCardDiscount()
-              }`}
+            text={`Rs. ${
+              GrandCalculation()
+            }`}
               color={colors.black}
               size={16}
               fontWeight="600"
