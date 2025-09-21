@@ -75,9 +75,9 @@ const LikedCard = ({
   const guestUserToken = useSelector(getGuestToken);
 
   useEffect(() => {
-    if (isCart) {
-      getSubTotal();
-    }
+    // if (isCart) {
+    //   getSubTotal();
+    // }
     getConvertedPrice();
     setIsWishlist(data?.isInWishlist);
   }, []);
@@ -86,19 +86,19 @@ const LikedCard = ({
 
   //   setIsWishlist(data?.isInWishlist)
   // }, [data]);
-  const getSubTotal = () => {
-    const newSubtotal =
-      Number(data?.Discount) > 0
-        ? Math.floor(
-            quantity *
-              (Number(data?.PAK_PRICE) -
-                Number(data?.PAK_PRICE) * (Number(data?.Discount) / 100))
-          )
-        : quantity * Number(data?.PAK_PRICE || 0);
+  // const getSubTotal = () => {
+  //   const newSubtotal =
+  //     Number(data?.Discount) > 0
+  //       ? Math.floor(
+  //           quantity *
+  //             (Number(data?.PAK_PRICE) -
+  //               Number(data?.PAK_PRICE) * (Number(data?.Discount) / 100))
+  //         )
+  //       : quantity * Number(data?.PAK_PRICE || 0);
 
-    quantity * Number(data?.PAK_PRICE || 0);
-    setSubtotal((pre) => Number(pre + newSubtotal));
-  };
+  //   quantity * Number(data?.PAK_PRICE || 0);
+  //   setSubtotal((pre) => Number(pre + newSubtotal));
+  // };
 
   const getConvertedPrice = () => {
     setPriceLoading(true);

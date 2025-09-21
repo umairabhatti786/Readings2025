@@ -101,7 +101,7 @@ const BookDetail = ({ route }: any) => {
   const isBuyNowEnable = useSelector(getIsBuyNowEnable);
   const focused = useIsFocused();
   const authData = useSelector(getAuthData);
-  console.log("authData", isBuyNowEnable);
+  console.log("authData", bookDetailData?.book);
   // useFocusEffect(
   //   useCallback(() => {
   //     console.log("isWishlist");
@@ -789,7 +789,7 @@ const BookDetail = ({ route }: any) => {
                   <BookInfo
                     onPress={() => onCopy("Paperback")}
                     title={"Binding"}
-                    detail={"Paperback"}
+                    detail={bookDetailData?.book?.binding}
                   />
 
                   <BookInfo

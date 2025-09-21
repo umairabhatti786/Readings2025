@@ -1,0 +1,1 @@
+/Users/umairabbas/Documents/GitHub/Readings2025/android/app/build/intermediates/cxx/RelWithDebInfo/6s4c301v/obj/armeabi-v7a

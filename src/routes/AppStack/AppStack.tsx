@@ -5,38 +5,7 @@ import {
   TransitionPresets,
 } from "@react-navigation/stack";
 import BottomTab from "../BottomTab";
-import NotificationsScreen from "../../screens/main/Notifications";
-import PrivacyPolicyScreen from "../../screens/main/PrivacyPolicy";
-import TermsAndCondirtionsScreen from "../../screens/main/TermsAndCondirtions";
-import AboutScreen from "../../screens/main/About";
-import LoginScreen from "../../screens/auth/Login";
-import SignupScreen from "../../screens/auth/Signup";
-import ForgotPasswordScreen from "../../screens/auth/ForgotPassword";
-import PaymentInfoScreen from "../../screens/auth/PaymentInfo";
-import PersonalInfoScreen from "../../screens/auth/PersonalInfo";
-import BookRequestScreen from "../../screens/main/BookRequest";
-import SendGiftScreen from "../../screens/main/SendGift";
-import FilterScreen from "../../screens/main/Filter";
-import BusinessScreen from "../../screens/main/Business";
-import AllSubCategoriesScreen from "../../screens/main/AllSubCategories";
-import DiscountsScreen from "../../screens/main/Discounts";
-import BookDetail from "../../screens/main/BookDetail";
-import ChangePasswordScreen from "../../screens/main/ChangePassword";
-import EditProfileScreen from "../../screens/main/EditProfile";
-import ProfileScreen from "../../screens/main/Profile";
-import CheckoutScreen from "../../screens/main/Checkout";
-import AddAddressScreen from "../../screens/main/AddAddress";
-import BookReviewScreen from "../../screens/main/BookReview";
-import SearchResultScreen from "../../screens/main/SearchResult";
-import TrackingScreen from "../../screens/main/Tracking";
-import OrderDetailScreen from "../../screens/main/OrderDetail";
-import RecommendedScreen from "../../screens/main/Recommended";
-import HelpAndSupportScreen from "../../screens/main/HelpAndSupport";
-import ChooseAddressScreen from "../../screens/main/ChooseAddress";
-import ChoosePaymentScreen from "../../screens/main/ChoosePayment";
-import CategoriesScreen from "../../screens/main/Categories";
-import SplashScreen from "../../screens/auth/Spash";
-import HighDiscountsScreen from "../../screens/main/HighDiscounts";
+
 import {
   AUTHDATA,
   GUESTTOKEN,
@@ -51,13 +20,45 @@ import {
 } from "../../redux/reducers/authReducer";
 import { windowWidth } from "../../utils/Dimensions";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import StationeryAndArt from "../../screens/main/StationeryAndArt";
 import { Linking, Platform } from "react-native";
 import { extractTypeAndId } from "../../utils/CommonHooks";
 import { navigate, resetAndNavigate } from "../../utils/NavigationUtil";
-import AddPaymentMethod from "../../screens/main/AddPaymentMethod";
-import StationeryBooks from "../../screens/main/StationeryBooks";
-import LiveOrderTrackingScreen from "../../screens/main/LiveOrderTracking";
+import NotificationsScreen from "../../screens/Main/Notifications";
+import PrivacyPolicyScreen from "../../screens/Main/PrivacyPolicy";
+import SplashScreen from "../../screens/auth/Spash";
+import StationeryAndArt from "../../screens/Main/StationeryAndArt";
+import StationeryBooks from "../../screens/Main/StationeryBooks";
+import LiveOrderTrackingScreen from "../../screens/Main/LiveOrderTracking";
+import TermsAndCondirtionsScreen from "../../screens/Main/TermsAndCondirtions";
+import AboutScreen from "../../screens/Main/About";
+import LoginScreen from "../../screens/auth/Login";
+import SignupScreen from "../../screens/auth/Signup";
+import ForgotPasswordScreen from "../../screens/auth/ForgotPassword";
+import AddPaymentMethod from "../../screens/Main/AddPaymentMethod";
+import PaymentInfoScreen from "../../screens/auth/PaymentInfo";
+import PersonalInfoScreen from "../../screens/auth/PersonalInfo";
+import BookRequestScreen from "../../screens/Main/BookRequest";
+import SendGiftScreen from "../../screens/Main/SendGift";
+import FilterScreen from "../../screens/Main/Filter";
+import BusinessScreen from "../../screens/Main/Business";
+import AllSubCategoriesScreen from "../../screens/Main/AllSubCategories";
+import DiscountsScreen from "../../screens/Main/Discounts";
+import BookDetail from "../../screens/Main/BookDetail";
+import ChangePasswordScreen from "../../screens/Main/ChangePassword";
+import EditProfileScreen from "../../screens/Main/EditProfile";
+import ProfileScreen from "../../screens/Main/Profile";
+import CheckoutScreen from "../../screens/Main/Checkout";
+import AddAddressScreen from "../../screens/Main/AddAddress";
+import BookReviewScreen from "../../screens/Main/BookReview";
+import SearchResultScreen from "../../screens/Main/SearchResult";
+import TrackingScreen from "../../screens/Main/Tracking";
+import RecommendedScreen from "../../screens/Main/Recommended";
+import HelpAndSupportScreen from "../../screens/Main/HelpAndSupport";
+import ChooseAddressScreen from "../../screens/Main/ChooseAddress";
+import ChoosePaymentScreen from "../../screens/Main/ChoosePayment";
+import HighDiscountsScreen from "../../screens/Main/HighDiscounts";
+import OrderDetailScreen from "../../screens/Main/OrderDetail";
+import CategoriesScreen from "../../screens/Main/Categories";
 
 const AppStack = ({ navigation }: any) => {
   const Stack = createStackNavigator();
@@ -150,6 +151,7 @@ console.log("guestToken",guestToken)
         //   }}
       >
         <Stack.Screen name={"SplashScreen"} component={SplashScreen} />
+
 
         <Stack.Screen name={"BottomTab"} component={BottomTab} />
         <Stack.Screen name={"Notifications"} component={NotificationsScreen} />

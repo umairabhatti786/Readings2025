@@ -4,14 +4,14 @@ import {colors} from '../../utils/colors';
 import {scale, verticalScale} from 'react-native-size-matters';
 import {images} from '../../assets/images';
 import CustomText from '../../components/CustomText';
-import HomeScreen from '../../screens/main/Home';
-import CategoriesScreen from '../../screens/main/Categories';
-import OrdersScreen from '../../screens/main/Orders';
-import CartScreen from '../../screens/main/Cart';
-import LikedScreen from '../../screens/main/Liked';
 import {font} from '../../utils/font';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import HomeScreen from '../../screens/Main/Home';
+import CategoriesScreen from '../../screens/Main/Categories';
+import OrdersScreen from '../../screens/Main/Orders';
+import CartScreen from '../../screens/Main/Cart';
+import LikedScreen from '../../screens/Main/Liked';
 
 const BottomTab = ({}: any) => {
   const Bottom = createBottomTabNavigator();

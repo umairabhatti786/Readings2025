@@ -21,7 +21,6 @@ import CustomToast from "../../../components/CustomToast";
 import { ApiServices } from "../../../apis/ApiServices";
 import { useSelector } from "react-redux";
 import { getGuestToken, getToken } from "../../../redux/reducers/authReducer";
-import ScreenLoader from "../../../components/Screenloader";
 import moment from "moment";
 import { images } from "../../../assets/images";
 import * as Animatable from "react-native-animatable";
@@ -29,6 +28,7 @@ import { getOrderStatusText } from "../../../utils/CommonHooks";
 import AddressCard from "../../../components/AddressCard";
 import { OrderProgressLayout } from "../../../utils/Loyout/OrderProgressLayout";
 import ShippingAddressCard from "../../../components/AddressCard/ShippingAddressCard";
+import ScreenLoader from "../../../components/ScreenLoader";
 
 const OrderDetailScreen = ({ route, navigation }: any) => {
   const item = route?.params?.item;

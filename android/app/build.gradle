@@ -82,8 +82,8 @@ android {
         applicationId "pk.com.reading"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 10
-        versionName "1.0.8"
+        versionCode 12
+        versionName "2.0.0"
     }
     signingConfigs {
         debug {

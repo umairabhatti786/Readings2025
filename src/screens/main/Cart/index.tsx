@@ -85,7 +85,8 @@ const CartScreen = ({ navigation }: any) => {
     ApiServices.GetOrderCart(params, async ({ isSuccess, response }: any) => {
       if (isSuccess) {
         let result = JSON.parse(response);
-        console.log("availableBookslength",result?.data?.preOrderBooks.length,result?.data?.availableBooks.length,result?.data?.outOfStockBooks.length,result?.data?.onDemandBooks.length)
+
+        setSubtotal(result?.data?.summary?.net_amount)
         if (
           result?.data?.availableBooks ||
           result?.data?.outOfStockBooks ||
